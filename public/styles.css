@@ -1,0 +1,9 @@
+#boxtop {
+  background-color:lightblue;
+  border: 1px solid blue;
+  min-height: 250px;
+}
+#boxdown {
+  min-height: 50px;
+  background-color: red;
+}
