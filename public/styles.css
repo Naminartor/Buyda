@@ -1,9 +1,24 @@
-#boxtop {
-  background-color:lightblue;
-  border: 1px solid blue;
-  min-height: 250px;
+:root {
+  --bs-primary: #382bf0;
+  --bs-light: #f8f9fa;
+  --bs-dark: #282828;
+  --bs-font-color: #000000;
 }
-#boxdown {
-  min-height: 50px;
-  background-color: red;
+
+.logo {
+  color: var(--bs-font-color);
+  background-color: "blue";
+  max-height: 50px;
 }
+
+/* Slider */
+.c-item {
+  height: 300px;
+}
+.c-img {
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8);
+}
+
+
