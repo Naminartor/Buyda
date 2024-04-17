@@ -62,29 +62,13 @@
 				<div class="col-auto border-end">
 					<span class="fs-5 fw-semibold">Filter</span>
 					<div class="container-fluid">
-						<ul id="filter-list" class="list-unstyled text-start"></ul>
+						<ul id="filter-list" class="list-unstyled text-start user-select-none"></ul>
 					</div>
 				</div>
 
 				<div class="col" style="width: 380px">
 					<div class="container-fluid text-center">
 						<div id="shop-item-container" class="row row-cols-6">
-							<div class="col card">
-                                <img src="..." class="card-img-top" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-							<div class="col card">
-                                <img src="..." class="card-img-top" alt="..." />
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
 						</div>
 					</div>
 				</div>
@@ -144,20 +128,45 @@
 			(() => {
 				const popup = document.querySelector("#category_popup .row");
 				const filter = document.querySelector("#filter-list");
-                const 
-				console.log(data);
+                const items = document.querySelector('#shop-item-container');
+
 				Object.entries(data.Shop).forEach(([key, value]) => {
-					console.log(value);
-					categotyFilterHtml = `<li><label class="form-check-label ms-0" for="${key}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${key}">${key}</label><ul class="">`;
+					
+					categotyFilterHtml = `<li><label class="form-check-label ms-0" for="${key}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${key}">${key}</label><ul class="list-unstyled">`;
 					categotyPopupHtml = `<div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="#${key}">${key}</a><ul class="list-unstyled">`;
+                    itemsHtml = ""
 					Object.keys(value).forEach((e) => {
 						categotyPopupHtml += `<li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover"href="#${e}">${e}</a></li>`;
-						categotyFilterHtml += `<li class=""><label class="form-check-label ms-0" for="${e}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${e}">${e}</label></li>`;
-					});
+						categotyFilterHtml += `<li class="">- <label class="form-check-label ms-0" for="${e}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${e}">${e}</label></li>`;
+                    });
+                    let i = 0;
+                    Object.values(value).forEach((cat) => {
+                        Object.values(cat).every((items)=>{
+                            if (!Array.isArray(items)){return};
+                            if (i > 20) {return};
+                            
+                            items.forEach((item)=>{
+                                
+                                if (typeof item === 'object') return
+                                i++;
+                                itemsHtml +=`<div class="col card">
+                                        <img src="..." class="card-img-top" alt="..." />
+                                        <div class="card-body">
+                                            <h5 class="card-title text-start">${item}</h5>
+                                            <a href="#" class="btn btn-primary float-end text-end">${ Math.floor(Math.random() *13)}.00$</a>
+                                        </div>
+                                    </div>`;
+                                
+                            }
+                            )
+                            return true;
+                        })
+                    })
 					categotyPopupHtml += "</ul></div>";
 					categotyFilterHtml += "</ul></li>";
 					popup.innerHTML += categotyPopupHtml;
 					filter.innerHTML += categotyFilterHtml;
+                    items.innerHTML += itemsHtml;
 				});
 			})();
 		</script>
