@@ -1,0 +1,185 @@
+{
+  "Shop": {
+    "Zierfische": {
+      "Zahnkarpfen": {
+        "Guppys": [
+          "Endlerguppy",
+          "Guppy Tuxedo",
+          "Cobra-Guppy",
+          "Guppy Panda",
+          "Guppy Neon Flamme",
+          "Cobra Flower"
+        ],
+        "Platys": [
+          "Korallen Platy",
+          "Roter Mikey Mouse Platy",
+          "Weißer Mikey Mouse Platy",
+          "Koi Platy",
+          "Calico Gold Platy",
+          "Pinker Mikey Mouse Platy"
+        ],
+        "Mollys": [
+          "Black Mollys",
+          "Dalmatiner Molly",
+          "Silber Molly",
+          "Gold Molly",
+          "Berliner Molly",
+          "Salt and Pepper Molly"
+        ]
+      },
+      "Bärblinge": [
+        "Moskitobärbling",
+        "Zebrabärbling",
+        "Perlhuhnbärbling",
+        "Zwergbärbling",
+        "Smaragd-Zwergbärbling",
+        "Espens Keilfleckbärbling"
+      ],
+      "Salmler": [
+        "Trauermantelsalmler Gold",
+        "Blauer Neon",
+        "Kongosalmler",
+        "Schmucksalmler",
+        "Rotkopfsalmler",
+        "Glühlichtsalmler",
+        "Feuertetra",
+        "Schilfsalmer",
+        "Kaisertetra",
+        "Schwarzer Kaisertetra",
+        "Zwergziersalmler",
+        "Blutsalmler",
+        "Scharzer Neon"
+      ],
+      "Buntbarsche": [
+        "Bolivianischer Schmetterlingsbuntbarsch",
+        "Tüpfelbuntbarsch",
+        "Borellis Zwergbuntbarsch",
+        "Südamerikanischer Schmetterlingsbuntbarsch",
+        "Purpurprachtbuntbarsch",
+        "Weißer Scalar"
+      ],
+      "Welse": [
+        "Ohrgitterharnischwels",
+        "Pandapanzerwels",
+        "Albino Metallpanzerwels",
+        "Antennenwels L 144",
+        "Gelber Antennenwels",
+        "Schachbrettzwergpanzerwels",
+        "Stromlinienpanzerwels"
+      ],
+      "Sonstige": [
+        "Prachflossensauger",
+        "Borneo Flossensauger",
+        "Honiggurami",
+        "Zwergfadenfisch Colisa Lalius",
+        "Kaplopez",
+        "Kampffisch",
+        "Kardinalfisch Gold",
+        "Kardinalfisch"
+      ],
+      "Wirbellose": {
+        "Garnelen": [
+          {
+            "Neocaridina": [
+              "Rote Rili Garnele",
+              "Yellow Fire Garnele",
+              "Blue Velvet Garnele"
+            ],
+            "Caridina": [
+              "Armano Garnelen",
+              "Galaxy Tigergarnele"
+            ]
+          }
+        ],
+        "Schnecken": [
+          "Posthornschnecke",
+          "Zebrarennschnecke",
+          "Raubschnecke",
+          "Stahlhelmschnecke",
+          "Cappuccino Schnecke",
+          "Tigerturmdeckelschnecke",
+          "Gestreifte Zebra-Apfelschnecke",
+          "Teufelsdornschnecke"
+        ]
+      }
+    },
+    "Pfanzen": {
+      "Stängelpfanzen": [
+        "Rotala rotundifolia",
+        "Bacopa monnieri compact",
+        "Limnophelia sessiliflora",
+        "Pogostemon erectus",
+        "Ludwigia palustris super red",
+        "Alternathera reineckii",
+        "Pogostemon helferi",
+        "Heteranthera zosterifolia",
+        "Hydrophila Pinnatifida"
+      ],
+      "Bodendecker": [
+        "Micranthemum tweediei",
+        "Micranthemum Monte Carlo",
+        "Helanthium Tenellum",
+        "Vallisneria Americana"
+      ],
+      "Rosette": [
+        "Hygrophila angustifolia",
+        "Nymphoides Hydrophylla Taiwan",
+        "Cyperus helferi"
+      ],
+      "Wurzelstock": [
+        "Anubias Heterophylla",
+        "Anubias Nangi",
+        "Anubias barteri",
+        "Echinodorus"
+      ],
+      "Schwimmpflanzen": [
+        "Muschelblume",
+        "Wasserlinsen"
+      ]
+    },
+    "Futter": {
+      "Flocken": [
+        "JBL NOVO BEL alle Arten S",
+        "ALOHA Fresh APANA CARNE Flakes",
+        "Dehner Aqua Zierfischfutter Flockenmix"
+      ],
+      "Granulat": [
+        "JBL NOVO BEL alle Arten XS"
+      ],
+      "Tabletten": [
+        "JBL Novo Pleco",
+        "Tetra Wafer MiniMix"
+      ],
+      "Spezialfutter": [
+        "Tubifex Würfel",
+        "Rote Mückenlaven"
+      ]
+    },
+    "Pfelge": {
+      "Dünger": [
+        {
+          "Tablettendüngung": [
+            "Crypto"
+          ]
+        }
+      ],
+      "Wasserzusatz": [
+        {
+          "Wasseraufbereitung": [
+            "Aquasafe",
+            "Seemandelbaumblätter",
+            "FilterActive",
+            "Wasserteststreifen"
+          ]
+        }
+      ],
+      "Medikamente": [
+        "sera baktopur",
+        "sera mycopur",
+        "sera omnipur A",
+        "sera med Nematol",
+        "sera med Protazol"
+      ]
+    }
+  }
+}
