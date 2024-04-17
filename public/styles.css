@@ -1,19 +1,53 @@
 :root {
   --bs-primary: #382bf0;
   --bs-light: #f8f9fa;
-  --bs-dark: #282828;
+  --bs-dark: #202020;
   --bs-font-color: #000000;
+  --bs-box: #404040;
 }
+
+body {
+  background-color: var(--bs-dark);
+  color: var(--bs-light);
+}
+
 .center {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
 }
 .logo {
   color: var(--bs-font-color);
   background-color: "blue";
 
+}
+/* Box */
+.box {
+  background-color: var(--bs-box);
+  margin: 18px;
+  padding: 18px;
+  border: 2px solid var(--bs-primary);
+  border-radius: 15px;
+}
+
+/* Navbar */
+.navbar {
+  margin-bottom: 20px;
+}
+/* footer */
+footer {
+  background-color: #1C2632;
+}
+
+.t-color {
+  color: 	#AFEEEE !important;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 /* Slider */
@@ -28,7 +62,35 @@
   filter: brightness(0.8);
 }
 
+.divider {
+  margin: 20px;
+  background-color: var(--bs-box);
+  border: 1px solid;
+  border-radius: 25px;
+  border-color: var(--bs-primary);
+}
+.b-split-b {
+  padding: 5px;
+  border-bottom: 2px solid var(--bs-primary);
+}
+.b-split-t {
+  padding: 5px;
+  border-top: 2px solid var(--bs-primary);
+}
 
+.b-img {
+  margin: 20px;
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+
+/* Username */
+.mid {
+  font-weight: bold;
+  padding: 80px 0;
+}
 /* Card */
 .cards-wrapper {
   display: flex;
