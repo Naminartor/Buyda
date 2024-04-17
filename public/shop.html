@@ -4,390 +4,171 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Bootstrap demo</title>
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous"
-		/>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 	</head>
 	<body>
-		<script
-			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-			crossorigin="anonymous"
-		></script>
-        <style>
-            .nav-link{
-                padding-bottom: 6px;
-                padding-top: 4px;
-            }
-        </style>
-        <div class="container-fluid" style="height: 100px; background: #f00;;">
-            
-        </div>
-        <div id="nav" class="container-fluid p-0">
-            <nav class="navbar bg-body-tertiary sticky-top  px-5 d-flex flex-row">
-                <ul class="nav nav-underline">
-                    <li class="nav-item">
-                        <a class="nav-link fs-5" href="index.html">
-                            Buyda				</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-5 active" href="shop.html">Shop</a>
-                    </li>
-                    
-                </ul>
-                <div class="flex-grow-1">
-                    <div class="w-100 px-3" style="max-width: 50rem;" >
-                        <form role="search">
-                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        </form>
-                    </div>
-                    </div>
-                <ul class="nav nav-underline navbar-right">
-                    <li class="nav-item">
-                        <a class="nav-link fs-5 href="shopping-cart.html">Shopping Cart</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-5 href="account.html">account</a>
-                    </li>
-                </ul>
-                </nav>
-        </div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+		<style>
+			.nav-link {
+				padding-bottom: 6px;
+				padding-top: 4px;
+			}
+		</style>
+		<script>
+			function category_popup_enable(e) {
+				const el = document.getElementById("category_popup");
+				console.log(el);
+				el.hidden = false;
+			}
+			function category_popup_disable(e) {
+				const el = document.getElementById("category_popup");
+				console.log(el);
+				el.hidden = true;
+			}
+		</script>
+		<div class="container-fluid" style="height: 100px; background: #f00"></div>
+		<div id="nav" class="container-fluid p-0">
+			<nav class="navbar bg-body-tertiary sticky-top px-5 d-flex flex-row">
+				<ul class="nav nav-underline">
+					<li class="nav-item">
+						<a class="nav-link fs-5" href="index.html"> Buyda </a>
+					</li>
+					<li class="nav-item" onmouseover="category_popup_enable(this)">
+						<a class="nav-link fs-5 active" href="shop.html">Shop</a>
+					</li>
+				</ul>
+				<div class="flex-grow-1">
+					<div class="w-100 px-3" style="max-width: 50rem">
+						<form role="search">
+							<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+						</form>
+					</div>
+				</div>
+				<ul class="nav nav-underline navbar-right">
+					<li class="nav-item">
+						<a class="nav-link fs-5" href="shopping-cart.html">Shopping Cart</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link fs-5" href="account.html">account</a>
+					</li>
+				</ul>
+			</nav>
+			<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: fixed; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+				<div class="row"></div>
+			</div>
+		</div>
 		<div class="container-fluid text-center">
 			<div class="row">
-				<div class="col-1">
-					<a
-						href="/"
-						class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"
-					>
-						<svg class="bi pe-none me-2" width="30" height="24">
-							<use xlink:href="#bootstrap" />
-						</svg>
-						<span class="fs-5 fw-semibold">Collapsible</span>
-					</a>
-					<ul class="list-unstyled ps-0">
-						<li class="mb-1">
-							<button
-								class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-								data-bs-toggle="collapse"
-								data-bs-target="#home-collapse"
-								aria-expanded="true"
-							>
-								Home
-							</button>
-							<div class="collapse show" id="home-collapse">
-								<ul
-									class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
-								>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Overview</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Updates</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Reports</a
-										>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="mb-1">
-							<button
-								class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-								data-bs-toggle="collapse"
-								data-bs-target="#dashboard-collapse"
-								aria-expanded="false"
-							>
-								Dashboard
-							</button>
-							<div class="collapse" id="dashboard-collapse">
-								<ul
-									class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
-								>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Overview</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Weekly</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Monthly</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Annually</a
-										>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="mb-1">
-							<button
-								class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-								data-bs-toggle="collapse"
-								data-bs-target="#orders-collapse"
-								aria-expanded="false"
-							>
-								Orders
-							</button>
-							<div class="collapse" id="orders-collapse">
-								<ul
-									class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
-								>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>New</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Processed</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Shipped</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Returned</a
-										>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="border-top my-3"></li>
-						<li class="mb-1">
-							<button
-								class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-								data-bs-toggle="collapse"
-								data-bs-target="#account-collapse"
-								aria-expanded="false"
-							>
-								Account
-							</button>
-							<div class="collapse" id="account-collapse">
-								<ul
-									class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
-								>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>New...</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Profile</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Settings</a
-										>
-									</li>
-									<li>
-										<a
-											href="#"
-											class="link-body-emphasis d-inline-flex text-decoration-none rounded"
-											>Sign out</a
-										>
-									</li>
-									Firefox
-								</ul>
-							</div>
-						</li>
-					</ul>
+				<div class="col-auto border-end">
+					<span class="fs-5 fw-semibold">Filter</span>
+					<div class="container-fluid">
+						<ul id="filter-list" class="list-unstyled text-start user-select-none"></ul>
+					</div>
 				</div>
+
 				<div class="col" style="width: 380px">
 					<div class="container-fluid text-center">
-						<div class="row row-cols-6">
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
-							<div class="col">
-								<div class="card" style="width: 18rem">
-									<img
-										src="..."
-										class="card-img-top"
-										alt="..."
-									/>
-									<div class="card-body">
-										<h5 class="card-title">Card title</h5>
-										<p class="card-text">
-											Some quick example text to build on
-											the card title and make up the bulk
-											of the card's content.
-										</p>
-										<a href="#" class="btn btn-primary"
-											>Go somewhere</a
-										>
-									</div>
-								</div>
-							</div>
+						<div id="shop-item-container" class="row row-cols-6">
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script>
+			const data = {
+				Shop: {
+					Zierfische: {
+						Zahnkarpfen: {
+							Bärblinge: ["Moskitobärbling", "Zwergbärbling", "Zebrabärbling", "Perlhuhnbärbling", "Roter Keilfleckbärbling", "Smaragt-Zwergbärbling", "Espeskeilfleckbärbling"],
+							Salmler: ["Roter Neon", "Blauer Neon", "Blauer Kongosalmler", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra", "Schilfseilmer"],
+							Buntbarsche: ["Scarlett Blaubarsch", "Blaubarsch", "Borellis Zwergbuntbarsch", "Schmetterlingsbuntbarsch", "Kakadu Zwergbuntbarsch", "Purpurprachtbuntbarsch"],
+							Welse: ["Ohrgitterharnischwels", "Pandapanzerwels", "Marmorierter Zwergpanzerwels", "Schwarzer Metallpanzerwels", "Antennenwels L 144", "Roter Antennenwels"],
+							Guppys: ["Endlerguppy", "Guppy Tuxedo", "Cobra-Guppy", "Guppy Schwarz", "Guppy Red Blond", "Regenbogenguppy"],
+							Mollys: ["Black Mollys", "Dalmatiner Molly", "Roter Molly", "Gold Molly"],
+							Schwerttäger: ["Schwerttäger Rot", "Schwerttäger Gold", "Schwerttäger Schwarz", "Lyra-Schwerttäger"],
+							Platys: ["Platy Rot", "Miki Mouse Platy", "Platy Red Miki Mouse", "Platy Weiß", "Pfeffer und Salz Platy"],
+						},
+						Wirbellose: {
+							Granelen: [
+								{
+									Neocaridina: ["Red Fire Garnele", "Orange Rili Garnele", "Yello Fire Garnele", "Blue Velvet Garnele", "Rote Sakura Garnele"],
+									Caridina: ["Armano Garnelen", "Black Bee Garnele", "Red Bee Garnele", "Snow White Garnele"],
+								},
+							],
+							Schnecken: ["Posthornschnecke", "Zebrarennschnecke", "Geweihschnecke", "Teufeldornschnecke", "Gelbe Felsenschnecke", "Raubschnecke"],
+						},
+					},
+					Pfanzen: {
+						Stängelpfanzen: ["Rotala rotundifolia", "Rotala Wallichii", "Bacopa caroliniana", "Limnophelia sessiliflora"],
+						Bodendecker: ["Elatine hydropiper", "Hemianthus micranthemoides", "Micranthemumtweediei Monte Carlo"],
+						Rosette: ["Cryptocoryne usteriana", "Cryptocoryne crispatula", "Echinodorus Reni", "Helantium bolivianum"],
+						Wurzelstock: ["Anubias gracilis", "Bucephalandra pygmaea", "Anubias barteri"],
+					},
+					Futter: {
+						Flocken: ["JBL NOVO BEL alle Arten S", "ALOHA Fresh APANA CARNE Flakes", "Dehner Aqua Zierfischfutter Flockenmix"],
+						Granulat: ["JBL NOVO BEL alle Arten XS"],
+						Tabletten: ["JBL Novo Pleco", "Tetra Wafer MiniMix"],
+						Spezialfutter: ["Tubifex Würfel", "Rote Mückenlaven"],
+					},
+					Pfelge: {
+						Dünger: [
+							{
+								Tablettendüngung: ["Crypto"],
+							},
+						],
+						Wasserzusatz: [
+							{
+								Wasseraufbereitung: ["Aquasafe", "Seemandelbaumblätter", "FilterActive", "Wasserteststreifen"],
+							},
+						],
+						Medikamente: ["sera baktopur", "sera mycopur", "sera omnipur A", "sera med Nematol", "sera med Protazol", "Hexamita"],
+					},
+				},
+			};
+			(() => {
+				const popup = document.querySelector("#category_popup .row");
+				const filter = document.querySelector("#filter-list");
+                const items = document.querySelector('#shop-item-container');
+
+				Object.entries(data.Shop).forEach(([key, value]) => {
+					
+					categotyFilterHtml = `<li><label class="form-check-label ms-0" for="${key}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${key}">${key}</label><ul class="list-unstyled">`;
+					categotyPopupHtml = `<div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="#${key}">${key}</a><ul class="list-unstyled">`;
+                    itemsHtml = ""
+					Object.keys(value).forEach((e) => {
+						categotyPopupHtml += `<li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover"href="#${e}">${e}</a></li>`;
+						categotyFilterHtml += `<li class="">- <label class="form-check-label ms-0" for="${e}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${e}">${e}</label></li>`;
+                    });
+                    let i = 0;
+                    Object.values(value).forEach((cat) => {
+                        Object.values(cat).every((items)=>{
+                            if (!Array.isArray(items)){return};
+                            if (i > 20) {return};
+                            
+                            items.forEach((item)=>{
+                                
+                                if (typeof item === 'object') return
+                                i++;
+                                itemsHtml +=`<div class="col card">
+                                        <img src="..." class="card-img-top" alt="..." />
+                                        <div class="card-body">
+                                            <h5 class="card-title text-start">${item}</h5>
+                                            <a href="#" class="btn btn-primary float-end text-end">${ Math.floor(Math.random() *13)}.00$</a>
+                                        </div>
+                                    </div>`;
+                                
+                            }
+                            )
+                            return true;
+                        })
+                    })
+					categotyPopupHtml += "</ul></div>";
+					categotyFilterHtml += "</ul></li>";
+					popup.innerHTML += categotyPopupHtml;
+					filter.innerHTML += categotyFilterHtml;
+                    items.innerHTML += itemsHtml;
+				});
+			})();
+		</script>
 	</body>
 </html>
