@@ -53,8 +53,8 @@
 					</li>
 				</ul>
 			</nav>
-			<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: fixed; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
-				<div class="row"></div>
+			<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+				<div class="row text-center"></div>
 			</div>
 		</div>
 		<div class="container-fluid text-center">
@@ -79,12 +79,12 @@
 				Shop: {
 					Zierfische: {
 						Zahnkarpfen: {
-							Bärblinge: ["Moskitobärbling", "Zwergbärbling", "Zebrabärbling", "Perlhuhnbärbling", "Roter Keilfleckbärbling", "Smaragt-Zwergbärbling", "Espeskeilfleckbärbling"],
-							Salmler: ["Roter Neon", "Blauer Neon", "Blauer Kongosalmler", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra", "Schilfseilmer"],
-							Buntbarsche: ["Scarlett Blaubarsch", "Blaubarsch", "Borellis Zwergbuntbarsch", "Schmetterlingsbuntbarsch", "Kakadu Zwergbuntbarsch", "Purpurprachtbuntbarsch"],
-							Welse: ["Ohrgitterharnischwels", "Pandapanzerwels", "Marmorierter Zwergpanzerwels", "Schwarzer Metallpanzerwels", "Antennenwels L 144", "Roter Antennenwels"],
-							Guppys: ["Endlerguppy", "Guppy Tuxedo", "Cobra-Guppy", "Guppy Schwarz", "Guppy Red Blond", "Regenbogenguppy"],
-							Mollys: ["Black Mollys", "Dalmatiner Molly", "Roter Molly", "Gold Molly"],
+							Bärblinge: ["Zwergbärbling",  "Perlhuhnbärbling",],
+							Salmler: ["Blauer Neon", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra", ],
+							Buntbarsche: ["Borellis Zwergbuntbarsch",  "Purpurprachtbuntbarsch"],
+							Welse: ["Ohrgitterharnischwels", "Pandapanzerwels", "Antennenwels L 144"],
+							Guppys: ["Cobra-Guppy", 'Cobra Flower', "Endlerguppy" ,'Guppy Neon Flamme' ,'Guppy Panda' ,'Guppy Tuxedo'],
+							Mollys: ["Black Mollys", "Dalmatiner Molly", "Salt and Pepper Molly", "Gold Molly"],
 							Schwerttäger: ["Schwerttäger Rot", "Schwerttäger Gold", "Schwerttäger Schwarz", "Lyra-Schwerttäger"],
 							Platys: ["Platy Rot", "Miki Mouse Platy", "Platy Red Miki Mouse", "Platy Weiß", "Pfeffer und Salz Platy"],
 						},
@@ -141,19 +141,21 @@
                     });
                     let i = 0;
                     Object.values(value).forEach((cat) => {
-                        Object.values(cat).every((items)=>{
+                        Object.entries(cat).every(([key,items])=>{
                             if (!Array.isArray(items)){return};
                             if (i > 20) {return};
-                            
                             items.forEach((item)=>{
                                 
                                 if (typeof item === 'object') return
                                 i++;
+                                console.log(`${key}/${item}`)
                                 itemsHtml +=`<div class="col card">
-                                        <img src="..." class="card-img-top" alt="..." />
+                                        <div style="height:180px;overflow:hidden; position:relative" class="">
+                                            <img style="overflow:hidden;" src="BuydaDaten/Bilder/${key}/${item}.jpg" class="card-img-top " alt="..." />
+                                        </div>
                                         <div class="card-body">
                                             <h5 class="card-title text-start">${item}</h5>
-                                            <a href="#" class="btn btn-primary float-end text-end">${ Math.floor(Math.random() *13)}.00$</a>
+                                            <a href="#" class="btn btn-primary float-end text-end">${ Math.floor(Math.random() *12)+1}.00$</a>
                                         </div>
                                     </div>`;
                                 
