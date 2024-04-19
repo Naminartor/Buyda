@@ -4,8 +4,16 @@
   --bs-dark: #202020;
   --bs-font-color: #000000;
   --bs-box: #404040;
+  --bs-body-bg:var(--bs-dark);
+  --bs-tertiary-bg-rgb:20, 20, 20;
+  --bs-body-color: #f8f9fa;
+  --bs-emphasis-color : #f8f9fa;
+  --bs-secondary-bg-rgb:50,50,50;
 }
-
+.card{
+  --bs-card-title-color: #f8f9fa;
+  --bs-card-color:#f8f9fa;
+}
 body {
   background-color: var(--bs-dark);
   color: var(--bs-light);
@@ -16,11 +24,13 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
 .logo {
   color: var(--bs-font-color);
   background-color: "blue";
 
 }
+
 /* Box */
 .box {
   background-color: var(--bs-box);
@@ -129,6 +139,7 @@ ul {
   border: 2px solid var(--bs-primary);
   border-radius: 10px;
 }
+
 html, 
 body {
     height: 100%;
