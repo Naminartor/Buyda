@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,10 +23,10 @@
 			function category_popup_disable(e) {
 				const el = document.getElementById("category_popup");
 				console.log(el);
-				el.hidden = true;
+                el.hidden = true;
 			}
 		</script>
-		<div class="container-fluid" style="height: 100px; background: #f00"></div>
+		<div class="container-fluid" style="height: 100px; background: #00ffff;"></div>
 		<div id="nav" class="container-fluid p-0 sticky-top">
 			<nav class="navbar bg-body-tertiary px-5 d-flex flex-row">
 				<ul class="nav nav-underline">
@@ -40,20 +40,20 @@
 				<div class="flex-grow-1">
 					<div class="w-100 px-3" style="max-width: 50rem">
 						<form role="search">
-							<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+							<input class="form-control" type="search" placeholder="Suche" aria-label="Search" />
 						</form>
 					</div>
 				</div>
 				<ul class="nav nav-underline navbar-right">
 					<li class="nav-item">
-						<a class="nav-link fs-5" href="shopping-cart.html">Shopping Cart</a>
+						<a class="nav-link fs-5" href="bestellung.html">Einkaufwagen</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link fs-5" href="account.html">account</a>
+						<a class="nav-link fs-5" href="account.html">Account</a>
 					</li>
 				</ul>
 			</nav>
-			<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+			<div id="category_popup" style="background:#777;" onmouseleave="category_popup_disable(this)" hidden style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px;">
 				<div class="row text-center"></div>
 			</div>
 		</div>
@@ -83,7 +83,7 @@
 							Salmler: ["Blauer Neon", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra", ],
 							Buntbarsche: ["Borellis Zwergbuntbarsch",  "Purpurprachtbuntbarsch"],
 							Welse: ["Ohrgitterharnischwels", "Pandapanzerwels", "Antennenwels L 144"],
-							Guppys: ["Cobra-Guppy", 'Cobra Flower', "Endlerguppy" ,'Guppy Neon Flamme' ,'Guppy Panda' ,'Guppy Tuxedo'],
+							Guppys: ["Cobra-Guppy", 'Cobra Flower', "Endlerguppy" ,'Guppy Neon Flamme' ,'Guppy Panda' ,'Guppy Toxedo'],
 							Mollys: ["Black Mollys", "Dalmatiner Molly", "Salt and Pepper Molly", "Gold Molly"],
 							Schwerttäger: ["Schwerttäger Rot", "Schwerttäger Gold", "Schwerttäger Schwarz", "Lyra-Schwerttäger"],
 							Platys: ["Platy Rot", "Miki Mouse Platy", "Platy Red Miki Mouse", "Platy Weiß", "Pfeffer und Salz Platy"],
@@ -150,7 +150,7 @@
                                 i++;
                                 console.log(`${key}/${item}`)
                                 itemsHtml +=`<div class="col card">
-                                        <div style="height:180px;overflow:hidden; position:relative" class="">
+                                        <div id="${item}" style="height:180px;overflow:hidden; position:relative" class="">
                                             <img style="overflow:hidden;" src="BuydaDaten/Bilder/${key}/${item}.jpg" class="card-img-top " alt="..." />
                                         </div>
                                         <div class="card-body">
