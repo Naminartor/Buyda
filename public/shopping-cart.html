@@ -16,31 +16,80 @@
 					<img class="center" src="images/logo-dark.png" />
 				</div>
 
-				<nav class="navbar bg-body-tertiary sticky-top px-5 d-flex flex-row">
-					<ul class="nav nav-underline">
-						<li class="nav-item">
-							<a class="nav-link fs-5" href="index.html"> Buyda </a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link fs-5 active" href="shop.html">Shop</a>
-						</li>
-					</ul>
-					<div class="flex-grow-1">
-						<div class="w-100 px-3" style="max-width: 50rem">
-							<form role="search">
-								<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
-							</form>
-						</div>
-					</div>
-					<ul class="nav nav-underline navbar-right">
-						<li class="nav-item">
-							<a class="nav-link fs-5" href="shopping-cart.html">Shopping Cart</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link fs-5" href="account.html">account</a>
-						</li>
-					</ul>
-				</nav>
+				<div id="nav" class="container-fluid p-0 sticky-top">
+                    <style>
+                        .nav-link {
+                            padding-bottom: 6px;
+                            padding-top: 4px;
+                        }
+                    </style>
+                    <script>
+                        function category_popup_enable(e) {
+                            const el = document.getElementById("category_popup");
+                            el.hidden = false;
+                        }
+                        function category_popup_disable(e) {
+                            const el = document.getElementById("category_popup");
+                            el.hidden = true;
+                        }
+                        function account_popup_enable(e) {
+                            const el = document.getElementById("account_popup");
+                            el.hidden = false;
+                        }
+                        function account_popup_disable(e) {
+                            const el = document.getElementById("account_popup");
+                            el.hidden = true;
+                        }
+                    </script>
+                    <nav class="navbar bg-body-tertiary px-5 d-flex flex-row mb-0">
+                        <ul class="nav nav-underline">
+                            <li class="nav-item">
+                                <a class="nav-link fs-5" href="index.html"> Buyda </a>
+                            </li>
+                            <li class="nav-item" onmouseover="category_popup_enable(this)">
+                                <a class="nav-link fs-5 active" href="shop.html">Shop</a>
+                            </li>
+                        </ul>
+                        <div class="flex-grow-1">
+                            <div class="w-100 px-3" style="max-width: 50rem">
+                                <form role="search">
+                                    <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+                                </form>
+                            </div>
+                        </div>
+                        <ul class="nav nav-underline navbar-right">
+                            <li class="nav-item">
+                                <a class="nav-link fs-5" href="shopping-cart.html">Shopping Cart</a>
+                            </li>
+                            <li class="nav-item" onmouseover="account_popup_enable(this)">
+                                <a class="nav-link fs-5" href="account.html">account</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px" hidden="">
+                        <div class="row text-center"><div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="shop.html#Zierfische">Zierfische</a><ul class="list-unstyled"><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Zahnkarpfen">Zahnkarpfen</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Wirbellose">Wirbellose</a></li></ul></div><div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="shop.html#Pfanzen">Pfanzen</a><ul class="list-unstyled"><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Stängelpfanzen">Stängelpfanzen</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Bodendecker">Bodendecker</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Rosette">Rosette</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Wurzelstock">Wurzelstock</a></li></ul></div><div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="shop.html#Futter">Futter</a><ul class="list-unstyled"><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Flocken">Flocken</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Granulat">Granulat</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Tabletten">Tabletten</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Spezialfutter">Spezialfutter</a></li></ul></div><div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="shop.html#Pfelge">Pfelge</a><ul class="list-unstyled"><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Dünger">Dünger</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Wasserzusatz">Wasserzusatz</a></li><li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="#Medikamente">Medikamente</a></li></ul></div></div>
+                    </div>
+                    <div id="account_popup" class="container-fluid bg-body-secondary" onmouseleave="account_popup_disable(this)" hidden style="position: absolute; width: 200px; right: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+                        <div class="row text-center">
+                            <div class="col">
+                                <ul class="nav flex-column nav-pills">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="account.html">My account</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="bestellung.html">Shopping history</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="account.html#address">Shoppingadress</a>
+                                    </li>
+                                    <li class="nav-item ms-5">
+                                        <a class="nav-link active mb-2 ms-5" href="#">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</div>
 			<div class="container-fluid mb-auto">
 				<div class="row">
