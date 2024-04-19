@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Buyda</title>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+        <link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -25,65 +26,105 @@
 				console.log(el);
 				el.hidden = true;
 			}
+			function account_popup_enable(e) {
+				const el = document.getElementById("account_popup");
+				console.log(el);
+				el.hidden = false;
+			}
+			function account_popup_disable(e) {
+				const el = document.getElementById("account_popup");
+				console.log(el);
+				el.hidden = true;
+			}
 		</script>
-		<div class="container-fluid" style="height: 100px; background: #f00"></div>
-		<div id="nav" class="container-fluid p-0 sticky-top">
-			<nav class="navbar bg-body-tertiary px-5 d-flex flex-row">
-				<ul class="nav nav-underline">
-					<li class="nav-item">
-						<a class="nav-link fs-5" href="index.html"> Buyda </a>
-					</li>
-					<li class="nav-item" onmouseover="category_popup_enable(this)">
-						<a class="nav-link fs-5 active" href="shop.html">Shop</a>
-					</li>
-				</ul>
-				<div class="flex-grow-1">
-					<div class="w-100 px-3" style="max-width: 50rem">
-						<form role="search">
-							<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
-						</form>
+		<div class="container-fluid p-0 d-flex flex-column" style="min-height: 100%">
+				<div class="logo">
+					<img class="center" src="images/logo-dark.png" />
+				</div>
+			<div id="nav" class="container-fluid p-0 sticky-top">
+				<nav class="navbar bg-body-tertiary px-5 d-flex flex-row mb-0">
+					<ul class="nav nav-underline">
+						<li class="nav-item">
+							<a class="nav-link fs-5" href="index.html"> Buyda </a>
+						</li>
+						<li class="nav-item" onmouseover="category_popup_enable(this)">
+							<a class="nav-link fs-5 active" href="shop.html">Shop</a>
+						</li>
+					</ul>
+					<div class="flex-grow-1">
+						<div class="w-100 px-3" style="max-width: 50rem">
+							<form role="search">
+								<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+							</form>
+						</div>
+					</div>
+					<ul class="nav nav-underline navbar-right">
+						<li class="nav-item">
+							<a class="nav-link fs-5" href="shopping-cart.html">Shopping Cart</a>
+						</li>
+						<li class="nav-item" onmouseover="account_popup_enable(this)">
+							<a class="nav-link fs-5" href="account.html">account</a>
+						</li>
+					</ul>
+				</nav>
+				<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+					<div class="row text-center"></div>
+				</div>
+				<div id="account_popup" class="container-fluid bg-body-secondary" onmouseleave="account_popup_disable(this)" style="position: absolute; width: 200px; right: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+					<div class="row text-center">
+						<div class="col">
+							<ul class="nav flex-column nav-pills">
+								<li class="nav-item">
+									<a class="nav-link" href="account.html">My account</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="bestellung.html">Shopping history</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="account.html#address">Shoppingadress</a>
+								</li>
+								<li class="nav-item ms-5">
+									<a class="nav-link active mb-2 ms-5" href="#">Logout</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
-				<ul class="nav nav-underline navbar-right">
-					<li class="nav-item">
-						<a class="nav-link fs-5" href="shopping-cart.html">Shopping Cart</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link fs-5" href="account.html">account</a>
-					</li>
-				</ul>
-			</nav>
-			<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
-				<div class="row text-center"></div>
 			</div>
-		</div>
-		<div class="container-fluid text-center">
-			<div class="row">
-				<div class="col-auto border-end">
-					<span class="fs-5 fw-semibold">Filter</span>
-					<div class="container-fluid">
-						<ul id="filter-list" class="list-unstyled text-start user-select-none"></ul>
+			<div class="container-fluid text-center">
+				<div class="row">
+					<div class="col-auto border-end">
+						<span class="fs-5 fw-semibold">Filter</span>
+						<div class="container-fluid">
+							<ul id="filter-list" class="list-unstyled text-start user-select-none"></ul>
+						</div>
 					</div>
-				</div>
 
-				<div class="col" style="width: 380px">
-					<div class="container-fluid text-center">
-						<div id="shop-item-container" class="row row-cols-6">
+					<div class="col" style="width: 380px">
+						<div class="container-fluid text-center">
+							<div id="shop-item-container" class="row row-cols-6"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<footer class="container-fluid mt-auto">
+			<ul class="nav justify-content-center border-bottom">
+				<li class="nav-item"><a href="about_us.html" class="nav-link px-2 text-muted t-color">About us</a></li>
+				<li class="nav-item"><a href="payment-shipping-info.html" class="nav-link px-2 text-muted t-color">Versand & Zahleninfo</a></li>
+				<li class="nav-item"><a href="impressum.html" class="nav-link px-2 text-muted t-color">Impressum</a></li>
+			</ul>
+		</footer>
 		<script>
 			const data = {
 				Shop: {
 					Zierfische: {
 						Zahnkarpfen: {
-							Bärblinge: ["Zwergbärbling",  "Perlhuhnbärbling",],
-							Salmler: ["Blauer Neon", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra", ],
-							Buntbarsche: ["Borellis Zwergbuntbarsch",  "Purpurprachtbuntbarsch"],
+							Bärblinge: ["Zwergbärbling", "Perlhuhnbärbling"],
+							Salmler: ["Blauer Neon", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra"],
+							Buntbarsche: ["Borellis Zwergbuntbarsch", "Purpurprachtbuntbarsch"],
 							Welse: ["Ohrgitterharnischwels", "Pandapanzerwels", "Antennenwels L 144"],
-							Guppys: ["Cobra-Guppy", 'Cobra Flower', "Endlerguppy" ,'Guppy Neon Flamme' ,'Guppy Panda' ,'Guppy Tuxedo'],
+							Guppys: ["Cobra-Guppy", "Cobra Flower", "Endlerguppy", "Guppy Neon Flamme", "Guppy Panda", "Guppy Tuxedo"],
 							Mollys: ["Black Mollys", "Dalmatiner Molly", "Salt and Pepper Molly", "Gold Molly"],
 							Schwerttäger: ["Schwerttäger Rot", "Schwerttäger Gold", "Schwerttäger Schwarz", "Lyra-Schwerttäger"],
 							Platys: ["Platy Rot", "Miki Mouse Platy", "Platy Red Miki Mouse", "Platy Weiß", "Pfeffer und Salz Platy"],
@@ -128,47 +169,47 @@
 			(() => {
 				const popup = document.querySelector("#category_popup .row");
 				const filter = document.querySelector("#filter-list");
-                const items = document.querySelector('#shop-item-container');
+				const items = document.querySelector("#shop-item-container");
 
 				Object.entries(data.Shop).forEach(([key, value]) => {
-					
 					categotyFilterHtml = `<li><label class="form-check-label ms-0" for="${key}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${key}">${key}</label><ul class="list-unstyled">`;
 					categotyPopupHtml = `<div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="#${key}">${key}</a><ul class="list-unstyled">`;
-                    itemsHtml = ""
+					itemsHtml = "";
 					Object.keys(value).forEach((e) => {
 						categotyPopupHtml += `<li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover"href="#${e}">${e}</a></li>`;
 						categotyFilterHtml += `<li class="">- <label class="form-check-label ms-0" for="${e}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${e}">${e}</label></li>`;
-                    });
-                    let i = 0;
-                    Object.values(value).forEach((cat) => {
-                        Object.entries(cat).every(([key,items])=>{
-                            if (!Array.isArray(items)){return};
-                            if (i > 20) {return};
-                            items.forEach((item)=>{
-                                
-                                if (typeof item === 'object') return
-                                i++;
-                                console.log(`${key}/${item}`)
-                                itemsHtml +=`<div class="col card">
+					});
+					let i = 0;
+					Object.values(value).forEach((cat) => {
+						Object.entries(cat).every(([key, items]) => {
+							if (!Array.isArray(items)) {
+								return;
+							}
+							if (i > 20) {
+								return;
+							}
+							items.forEach((item) => {
+								if (typeof item === "object") return;
+								i++;
+								console.log(`${key}/${item}`);
+								itemsHtml += `<div class="col card">
                                         <div style="height:180px;overflow:hidden; position:relative" class="">
                                             <img style="overflow:hidden;" src="BuydaDaten/Bilder/${key}/${item}.jpg" class="card-img-top " alt="..." />
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title text-start">${item}</h5>
-                                            <a href="#" class="btn btn-primary float-end text-end">${ Math.floor(Math.random() *12)+1}.00$</a>
+                                            <a href="#" class="btn btn-primary float-end text-end">${Math.floor(Math.random() * 12) + 1}.00$</a>
                                         </div>
                                     </div>`;
-                                
-                            }
-                            )
-                            return true;
-                        })
-                    })
+							});
+							return true;
+						});
+					});
 					categotyPopupHtml += "</ul></div>";
 					categotyFilterHtml += "</ul></li>";
 					popup.innerHTML += categotyPopupHtml;
 					filter.innerHTML += categotyFilterHtml;
-                    items.innerHTML += itemsHtml;
+					items.innerHTML += itemsHtml;
 				});
 			})();
 		</script>
