@@ -9,6 +9,7 @@
   --bs-body-color: #f8f9fa;
   --bs-emphasis-color : #f8f9fa;
   --bs-secondary-bg-rgb:50,50,50;
+  --bs-secondary-color:#f8f9fa;
 }
 .card{
   --bs-card-title-color: #f8f9fa;
