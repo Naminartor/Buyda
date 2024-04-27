@@ -43,7 +43,7 @@
                         el.hidden = true;
                     }
                 </script>
-				<nav class="navbar bg-body-tertiary px-5 d-flex flex-row mb-0">
+				<nav class="navbar bg-black px-5 d-flex flex-row mb-0">
 					<ul class="nav nav-underline">
 						<li class="nav-item">
 							<a class="nav-link fs-5" href="index.html"> Home</a>
@@ -55,7 +55,7 @@
 					<div class="flex-grow-1">
 						<div class="w-100 px-3" style="max-width: 50rem">
 							<form role="search">
-								<input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+								<input class="form-control" style="background-color:white" type="search" placeholder="Search" aria-label="Search" />
 							</form>
 						</div>
 					</div>
@@ -92,7 +92,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="container-fluid text-center">
+			<div class="container text-center">
 				<div class="row">
 					<div class="col-auto border-end">
 						<span class="fs-5 fw-semibold">Filter</span>
@@ -102,14 +102,14 @@
 					</div>
 
 					<div class="col" style="width: 380px">
-						<div class="container-fluid text-center">
-							<div id="shop-item-container" class="row row-cols-6"></div>
+						<div class="container text-center">
+							<div id="shop-item-container" class="row row-cols-4"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<footer class="container-fluid mt-auto">
+		<footer class="container mt-auto">
 			<ul class="nav justify-content-center border-bottom">
 				<li class="nav-item"><a href="about_us.html" class="nav-link px-2 text-muted t-color">About us</a></li>
 				<li class="nav-item"><a href="payment-shipping-info.html" class="nav-link px-2 text-muted t-color">Versand & Zahleninfo</a></li>
@@ -193,7 +193,7 @@
 								if (typeof item === "object") return;
 								i++;
 								console.log(`${key}/${item}`);
-								itemsHtml += `<div class="col card">
+								itemsHtml += `<div class="col card bg-secondary mb-2 p-1 rounded">
                                         <div style="height:180px;overflow:hidden; position:relative" class="">
                                             <img style="overflow:hidden;" src="BuydaDaten/Bilder/${key}/${item}.jpg" class="card-img-top " alt="..." />
                                         </div>

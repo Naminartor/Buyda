@@ -1,25 +1,22 @@
 :root {
-  --bs-primary: #382bf0;
-  --bs-light: #f8f9fa;
-  --bs-dark: #202020;
-  --bs-font-color: #000000;
-  --bs-box: #404040;
-  --bs-body-bg:var(--bs-dark);
-  --bs-tertiary-bg-rgb:20, 20, 20;
-  --bs-body-color: #f8f9fa;
-  --bs-emphasis-color : #f8f9fa;
-  --bs-secondary-bg-rgb:50,50,50;
-  --bs-secondary-color:#f8f9fa;
+  --bs-body-bg: #212529;
+  --bs-secondary-bg: #343a40;
+  --bs-primary: #0D6EFD;
+  --bs-font-color: #ffffff;
 }
+
+body {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-font-color);
+}
+
 .card{
   --bs-card-title-color: #f8f9fa;
   --bs-card-color:#f8f9fa;
 }
-body {
-  background-color: var(--bs-dark);
-  color: var(--bs-light);
+.form-control {
+  background-color: white;
 }
-
 .center {
   display: block;
   margin-left: auto;
@@ -34,7 +31,7 @@ body {
 
 /* Box */
 .box {
-  background-color: var(--bs-box);
+  background-color: var(--bs-secondary-bg);
   margin: 18px;
   padding: 18px;
   border: 2px solid var(--bs-primary);
@@ -126,7 +123,7 @@ ul {
   top: 50%;
   transform: translateY(-50%);
 }
-@media (min-width: 800px) {
+@media (min-width: 600px) {
   .card img {
     height: 15em;
   }
