@@ -83,8 +83,21 @@
 						<button class="btn btn-primary center" type="submit">Save</button>
 					</div>
 				</div>
+				<script>
+					(async ()=>{
+						const account = await api.getAccount()
+						$(document).ready(() =>{
+						$("input[placeholder='Username']").val(account.username)
+						$("input[placeholder='Vorname']").val(account.firstname)
+						$("input[placeholder='Nachname']").val(account.lastname)
+						$("input[placeholder='Addresse']").val(account.address)
+						$("input[placeholder='Postleitzahl']").val(account.zip)
+						$("input[placeholder='Stadt']").val(account.city)
+					});
+					})();
+				</script>
 			</main>
-			<footer></footer>
+			<footer>
 		</div>
 	</body>
 </html>
