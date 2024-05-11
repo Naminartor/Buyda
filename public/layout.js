@@ -12,7 +12,6 @@ $(document).ready(() => {
     addFooter();
     addTopBar();
     $("main").addClass("container-fluid  mb-auto");
-    
 });
 const CONSTANTS = {
     CURRENCY: "€"

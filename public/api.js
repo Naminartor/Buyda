@@ -1,255 +1,164 @@
 /**
- * @typedef {Object} Item
- * @property {string} name
- * @property {string} img
- * @property {number} price
- * @property {string} category
- * @property {string|undefined} subCategory
+ * The API object provides methods to interact with the server's API.
+ * @namespace
  */
-/**
- * @typedef {Object} Order
- * @property {Item} item
- * @property {int} amount
- * @property {number} price
- * @property {string} date
- */
-
-const img_path = "BuydaDaten/Bilder";
-function flat(data, arr) {
-	Object.values(data).forEach((e) => {
-		if (!e.name) {
-			flat(e, arr);
-		} else {
-			arr.push(e);
-		}
-	});
-	return arr;
-}
-
-const data = {
-	Shop: {
-		Zierfische: {
-			Zahnkarpfen: {
-				Bärblinge: ["Zwergbärbling", "Perlhuhnbärbling"],
-				Salmler: ["Blauer Neon", "Schmucksalmler", "Rotkopfsalmler", "Glühlichtsalmler", "Feuertetra"],
-				Buntbarsche: ["Borellis Zwergbuntbarsch", "Purpurprachtbuntbarsch"],
-				Welse: ["Ohrgitterharnischwels", "Pandapanzerwels", "Antennenwels L 144"],
-				Guppys: ["Cobra-Guppy", "Cobra Flower", "Endlerguppy", "Guppy Neon Flamme", "Guppy Panda", "Guppy Tuxedo"],
-				Mollys: ["Black Mollys", "Dalmatiner Molly", "Salt and Pepper Molly", "Gold Molly"],
-				Schwerttäger: ["Schwerttäger Rot", "Schwerttäger Gold", "Schwerttäger Schwarz", "Lyra-Schwerttäger"],
-				Platys: ["Platy Rot", "Miki Mouse Platy", "Platy Red Miki Mouse", "Platy Weiß", "Pfeffer und Salz Platy"],
-			},
-			Wirbellose: {
-				Granelen: [
-					{
-						Neocaridina: ["Red Fire Garnele", "Orange Rili Garnele", "Yello Fire Garnele", "Blue Velvet Garnele", "Rote Sakura Garnele"],
-						Caridina: ["Armano Garnelen", "Black Bee Garnele", "Red Bee Garnele", "Snow White Garnele"],
-					},
-				],
-				Schnecken: ["Posthornschnecke", "Zebrarennschnecke", "Geweihschnecke", "Teufeldornschnecke", "Gelbe Felsenschnecke", "Raubschnecke"],
-			},
-		},
-		Pfanzen: {
-			Stängelpfanzen: ["Rotala rotundifolia", "Rotala Wallichii", "Bacopa caroliniana", "Limnophelia sessiliflora"],
-			Bodendecker: ["Elatine hydropiper", "Hemianthus micranthemoides", "Micranthemumtweediei Monte Carlo"],
-			Rosette: ["Cryptocoryne usteriana", "Cryptocoryne crispatula", "Echinodorus Reni", "Helantium bolivianum"],
-			Wurzelstock: ["Anubias gracilis", "Bucephalandra pygmaea", "Anubias barteri"],
-		},
-		Futter: {
-			Flocken: ["JBL NOVO BEL alle Arten S", "ALOHA Fresh APANA CARNE Flakes", "Dehner Aqua Zierfischfutter Flockenmix"],
-			Granulat: ["JBL NOVO BEL alle Arten XS"],
-			Tabletten: ["JBL Novo Pleco", "Tetra Wafer MiniMix"],
-			Spezialfutter: ["Tubifex Würfel", "Rote Mückenlaven"],
-		},
-		Pfelge: {
-			Dünger: [
-				{
-					Tablettendüngung: ["Crypto"],
-				},
-			],
-			Wasserzusatz: [
-				{
-					Wasseraufbereitung: ["Aquasafe", "Seemandelbaumblätter", "FilterActive", "Wasserteststreifen"],
-				},
-			],
-			Medikamente: ["sera baktopur", "sera mycopur", "sera omnipur A", "sera med Nematol", "sera med Protazol", "Hexamita"],
-		},
-	},
-};
-function dataToItems(data) {
-	Object.entries(data.Shop).forEach(([majorCategory, mcat]) => {
-		Object.entries(mcat).forEach(([subCategory, items]) => {
-			if (Array.isArray(items)) {
-				items.forEach((item, i) => {
-					items[i] = {
-						name: item,
-						img: `${img_path}/${majorCategory}/${subCategory}/${item}.jpg`,
-						price: Math.floor(Math.random() * 12) + 1,
-						category: majorCategory,
-						subCategory: subCategory,
-					};
-				});
-			} else {
-				Object.entries(items).forEach(([scat, subItems], i) => {
-					subItems.forEach((subItem, i) => {
-
-						subItems[i] = {
-							name: subItem,
-							img: `${img_path}/${scat}/${subItem}.jpg`,
-							price: Math.floor(Math.random() * 12) + 1,
-							category: majorCategory,
-							subCategory: subCategory,
-						};
-					});
-				});
-			}
-		});
-	});
-	return data;
-}
-
 const api = {
-	data: dataToItems(data),
-	getMajorCategories: async function () {
-		return Object.keys(this.data.Shop);
-	},
-
-	getSubCategories: async function (majorCategory) {
-		return Object.keys(this.data.Shop[majorCategory]);
-	},
-
-	getItemsByCategory: async function (majorCategory) {
-		return this.data.Shop[majorCategory][subCategory];
-	},
-	/**
-	 * returns item by name
-	 * @param {str} name
-	 * @returns {Promise<Item|null>}
-	 */
-	getItemByName: async function (name) {
-		for (const majorCategory in this.data.Shop) {
-			for (const subCategory in this.data.Shop[majorCategory]) {
-				for (const item of this.data.Shop[majorCategory][subCategory]) {
-					if (item === name) {
-						return item;
-					}
-				}
-			}
-		}
-		return null;
-	},
-	/**
-	 * gets items
-	 * @param {Object} opt
-	 * @property {number|undefined} limit the number of items to return
-	 * @property {number|undefined} offset the number of items to skip
-	 * @returns
-	 */
-	getItems: async function (opt) {
-		opt = opt || {};
-		opt.offset = opt.offset || 0;
-		start = opt.offset;
-		end = opt.limit ? start + opt.limit : undefined;
-		return flat(this.data.Shop, []).slice(start, end);
-	},
     /**
-	 * @param {Object} opt
-     * @property {number|undefined} limit the number of orders to return
-     * @property {number|undefined} offset the number of orders to skip
-     * @returns {Promise<Order[]>}
+     * Retrieves the major categories from the server.
+     * @async
+     * @function
+     * @returns {Promise<Array>} A promise that resolves to an array of major categories.
      */
-    getOrderHistory: async function (opt) {
-        opt = opt || {};
-        opt.offset = opt.offset || 0;
-        start = opt.offset;
-        end = opt.limit ? start + opt.limit : undefined;
-        return [{
-            item: {
-                name: "item",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 2,
-            price: 1.00,
-            date: "2022-01-01T00:00:00.000Z",
-        }, {
-            item: {
-                name: "item",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 1,
-            price: 3.00,
-            date: "2022-01-02T00:00:00.000Z",
-        }, {
-            item: {
-                name: "item",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 1,
-            price: 1.00,
-            date: "2022-01-03T00:00:00.000Z",
-        }, {
-            item: {
-                name: "item",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 1,
-            price: 5.00,
-            date: "2022-01-05T00:00:00.000Z",
-        }, {
-            item: {
-                name: "i2tem",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 1,
-            price: 18.00,
-            date: "2022-01-05T00:00:00.000Z",
-        }].slice(start, end);
+    getMajorCategories: async function() {
+        try {
+            const response = await fetch('/api/categories');
+            const data = await response.json();
+            // Process the data or return it as needed
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle the error appropriately
+        }
     },
-    addToCart: async function (item, amount) {
-        console.log(`Added ${amount} ${item.name} to cart`);
+
+    /**
+     * Retrieves the sub-categories for a given major category from the server.
+     * @async
+     * @function
+     * @param {string} majorCategory - The major category for which to retrieve the sub-categories.
+     * @returns {Promise<Array>} A promise that resolves to an array of sub-categories.
+     */
+    getSubCategories: async function(majorCategory) {
+        try {
+            const response = await fetch(`/api/categories/${majorCategory}`);
+            const data = await response.json();
+            // Process the data or return it as needed
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle the error appropriately
+        }
     },
-    getCart: async function () {
-        return [{
-            item: {
-                name: "item",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 2,
-            price: 2.00,
-        }, {
-            item: {
-                name: "item",
-                img: "item.jpg",
-                price: 1.00,
-                category: "category",
-                subCategory: "subCategory"
-            },
-            amount: 1,
-            price: 3.00,
-        }];
+
+    /**
+     * Retrieves an item by its name from the server.
+     * @async
+     * @function
+     * @param {string} name - The name of the item to retrieve.
+     * @returns {Promise<Object>} A promise that resolves to the item object.
+     */
+    getItemByName: async function(name) {
+        try {
+            const response = await fetch(`/api/items/${name}`);
+            const data = await response.json();
+            // Process the data or return it as needed
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle the error appropriately
+        }
     },
-    checkout: async function () {
-        console.log("checkout");
+
+    /**
+     * Retrieves items from the server based on the provided options.
+     * @async
+     * @function
+     * @param {Object} opt - The options for retrieving items.
+     * @param {number} opt.limit - The maximum number of items to retrieve.
+     * @param {number} opt.offset - The offset for pagination.
+     * @param {string} opt.majorCategory - The major category to filter items by.
+     * @param {string} opt.subCategory - The sub-category to filter items by.
+     * @returns {Promise<Array>} A promise that resolves to an array of items.
+     */
+    getItems: async function(opt) {
+        try {
+            const response = await fetch(`/api/items?limit=${opt.limit}&offset=${opt.offset}&majorCategory=${opt.majorCategory}&subCategory=${opt.subCategory}`);
+            const data = await response.json();
+            // Process the data or return it as needed
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle the error appropriately
+        }
     },
-    login: async function (username, password){
-        console.log(`login as ${username}`);
+    getOrderHistory: async function() {
+        try {
+            const response = await this.authFetch('/api/user/orders');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    updateCart: async function(item, amount) {
+        try {
+            const response = await this.authFetch('/api/user/cart/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item, amount }),
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    deleteCart: async function(item) {
+        try {
+            const response = await this.authFetch('/api/user/cart/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item }),
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    getCart: async function() {
+        try {
+            const response = await this.authFetch('/api/user/cart', {redirect: 'follow'  });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    checkout: async function() {
+        try {
+            const response = await this.authFetch('/api/user/checkout', {
+                method: 'POST',
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    getAccount: async function() {
+        try {
+            const response = await fetch('/api/user');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    authFetch: async function(url, options) {
+        try {
+            const response = await fetch(url, options);
+            if (response.status === 401) {
+                window.location.replace('/signin');
+            }
+            return response;
+        } catch (error) {
+            console.error('Error:', error);
+        }
     },
 };
+
