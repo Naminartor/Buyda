@@ -177,7 +177,7 @@
 					categotyPopupHtml = `<div class="col"><a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="shop.html#${key}">${key}</a><ul class="list-unstyled">`;
 					itemsHtml = "";
 					Object.keys(value).forEach((e) => {
-						categotyPopupHtml += `<li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover"href="#${e}">${e}</a></li>`;
+						categotyPopupHtml += `<li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover"href="shop.html#${e}">${e}</a></li>`;
 						categotyFilterHtml += `<li class="">- <label class="form-check-label ms-0" for="${e}"><input class="form-check-input me-1 ms-0" type="checkbox" value="" name="${e}">${e}</label></li>`;
 					});
 					let i = 0;
