@@ -13,19 +13,24 @@ function fixItem(item){
     return item
   }
   item.act = item.act.split(":")[1].trim().replace("&nbsp;", "")
-  item.aquaSize = item.aquaSize.split(":")[1].trim().slice(0,-2).trim().replace("&nbsp;", "")
+  item.aquaSize = item.aquaSize.match(/\d+/)[0]
   item.feed = item.feed.split(":")[1].trim().replace("&nbsp;", "")
   item.breeding = item.breeding.split(":")[1].trim().replace("&nbsp;", "")
   item.count = item.count.split(":")[1].trim().replace("&nbsp;", "")
   item.size = item.size.split(":")[1].trim().replace("&nbsp;", "")
   item.origin = item.origin.split(":")[1].trim().replace("&nbsp;", "")
-  ph = item.ph.match(/\d+/)
-  item.phMin = ph[0]
-  item.phMax = ph[1]
+ // console.log(item.ph)
+  ph = [...item.ph.matchAll(/\d+(,\d+)*/g)]
+  item.phMin = ph[0][0].replace(",",".")
+  item.phMax = ph[1][0].replace(",",".")
   delete item.ph
-  temp = item.temp.match(/\d+/)
-  item.tempMin = temp[0]
-  item.tempMax = temp[1]
+  temp = [...item.temp.matchAll(/\d+(,\d+)*/g)]
+  item.tempMin = temp[0][0].replace(",",".")
+  if (temp.length == 1){
+    item.tempMax = temp[0][0].replace(",",".")
+  }else{
+  item.tempMax = temp[1][0].replace(",",".")
+  }
   delete item.temp
   item.h2OHardness = item.h2OHardness.split(":")[1].trim().replace("&nbsp;", "")
   return item

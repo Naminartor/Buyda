@@ -48,7 +48,7 @@
             const orders = await api.getOrderHistory()
             for (let i = 0; i < orders.length; i) {
               $orders = $('<p></p>').append($('#order-template').html())
-              $orders.find("h3 span").text(new Date(orders[i].date).toLocaleDateString())
+			$orders.find("h3 span").text(new Date(orders[i].date).toLocaleDateString())
               do {
               const order = orders[i];
               $order = $('<p></p>').append($('#order-slot-template').html())

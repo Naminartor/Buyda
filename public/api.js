@@ -39,7 +39,25 @@ const api = {
             // Handle the error appropriately
         }
     },
-
+    /**
+     * Retrieves items from the server based on the provided search query.
+     * @async
+     * @function
+     * @param {string} search - The search query.
+     * @param {Object} opt - The options for retrieving items.
+     * @param {number} opt.limit - The maximum number of items to retrieve.
+     * @param {number} opt.offset - The offset for pagination.
+     * @returns {Promise<Array>} A promise that resolves to an array of items.
+     */
+    searchItems: async function(search,opt) {
+        try {
+            const response = await fetch(`/api/items/search?query=${search}&limit=${opt.limit}&offset=${opt.offset}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
     /**
      * Retrieves an item by its name from the server.
      * @async
@@ -58,7 +76,20 @@ const api = {
             // Handle the error appropriately
         }
     },
-
+    /**
+     * Retrieves the stock count of an item from the server.
+     * @param {string} name name of item
+     * @returns count of item in stock
+     */
+    getItemStock: async function(name) {
+        try {
+            const response = await fetch(`/api/item/${name}/stock`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
     /**
      * Retrieves items from the server based on the provided options.
      * @async

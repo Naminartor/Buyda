@@ -94,11 +94,11 @@
 						console.log(sum);
 						$('#summary').text(sum + CONSTANTS.CURRENCY);
 						$('#item-count').text(amount);
-						$('#shipping-cost').text(shippingcost + CONSTANTS.CURRENCY);
+						$('#shipping-cost').text(`${shippingcost} ${CONSTANTS.CURRENCY}`);
 						$('#total').text(sum + shippingcost + CONSTANTS.CURRENCY);
 						$('#cart').find('button').click(() => {
 							api.checkout();
-							window.location.href = 'bestellung.html';
+							window.location.href = 'bestellung';
 						});
 					});
 

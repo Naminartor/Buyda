@@ -19,26 +19,69 @@
 				<div class="row">
 					<div class="col-auto">
 						<div style="height: 180px; object-fit: scale-down; position: relative" class="">
-							<img height="300px" src="BuydaDaten/Bilder/Guppys/Cobra-Guppy.jpg" class="card-img-top" alt="..." />
+							<img height="300px" src="" class="card-img-top" alt="..." />
 						</div>
 					</div>
-					<div class="col">
-						<p class="h3">Cobra-Guppy</p>
-						<p>Der Guppy wird auch der Millionenfisch genannt und ge&ouml;rt zu den lebendgeb&auml;renden Zahnkarpfen.</p>
+					<div id="item-listing" class="col">
+						<p id="title" class="h3"></p>
+						<p id="description"></p>
+						<ul id="item-data">
+						<li id="behavior">Verhalten: <span></span></li>
+						<li id="habitatSize">Beckengröße: ab <span>l</span></li>
+						<li id="feed">Futter: <span></span></li>
+						<li id="breeding">Vermehrung: <span></span></li>
+						<li id="count">Anzahl: <span></span></li>
+						<li id="size">Größe: <span></span></li>
+						<li id="origin">Herkunft: <span></span></li>
+						<li id="ph">ph-wert: <span></span></li>
+						<li id="temp">Temperatur: <span></span>°C</li>
+						<li id="h2Ohardness">Wasserhärte: <span></span></li>
+					</ul>
 					</div>
 					<div class="col-auto card bg-body-secondary d-flex flex-column rounded-bottom me-0" style="width: 300px; height: 500px">
 						<div>
-							<p class="h3 mt-2">4.00</p>
-							<p class="bg-secondary rounded">12 St</p>
+							<p id="price" class="h3 mt-2">4.00</p>
+							<p id="stock" class="bg-secondary rounded">12 St</p>
 						</div>
 						<div class="position-absolute bottom-0 mb-3" style="flex: 0 1 60px">
 							<button class="btn btn-primary mb-1 w-100">In Einkaufswagen</button>
-							<a class="btn btn-primary w-100" href="shopping-cart.html">Jetzt einkaufen</a>
+							<a class="btn btn-primary w-100" href="shopping-cart">Jetzt einkaufen</a>
 						</div>
 					</div>
 				</div>
 			</main>
 			<footer></footer>
 		</div>
+		<script>
+			const item_name = window.location.hash.substring(1);
+			
+			$(document).ready(() => {
+				api.getItemByName(item_name).then(item => {
+					console.log(item)
+					$('main').find('img').attr('src', item.img);
+					$('#description').text(item.description);
+					$('#price').text(item.price.toFixed(2) + ' €');
+					if (item.feed){
+						$('#feed').text(item.feed);
+						$('#behavior span').text(item.behavior);
+						$('#habitatSize span').text(item.habitatSize);
+						$('#breeding span').text(item.breeding);
+						$('#count span').text(item.count);
+						$('#size span').text(item.size);
+						$('#origin span').text(item.origin);
+						$('#ph span').text(`${item.phMin} - ${item.phMax}`);
+						$('#temp span').text(`${item.tempMin} - ${item.tempMax}`);
+						$('#h2Ohardness span').text(`${item.h2OHardness}`);
+						$('#title').text(item.name);
+					}else{
+						$('#item-data').hide()
+					}
+
+			});
+			api.getItemStock(item_name).then(stock => {
+				$('#stock').text(stock + ' St');
+			});
+			});
+		</script>
 	</body>
 </html>

@@ -11,7 +11,7 @@ db.on("error", function(error) {
  * Create a new table named 'items; with @type {Item}
  */
 db.serialize(function () {
-	db.run("CREATE TABLE IF NOT EXISTS items (name TEXT PRIMARY KEY, price REAL, img TEXT, majorCategory TEXT, subCategory TEXT, description TEXT, feed TEXT, breeding TEXT, count TEXT, size TEXT , origin TEXT, phMin REAL, phMax REAL, tempMin REAL, tempMax REAL, h2OHardness TEXT)");
+	db.run("CREATE TABLE IF NOT EXISTS items (name TEXT PRIMARY KEY, price REAL, img TEXT, majorCategory TEXT, subCategory TEXT, description TEXT, behavior TEXT, habitatSize INTEGER, feed TEXT, breeding TEXT, count TEXT, size TEXT , origin TEXT, phMin REAL, phMax REAL, tempMin REAL, tempMax REAL, h2OHardness TEXT)");
 
 	/**
 	 * Create a new table named 'orders; with @type {Order}
@@ -38,6 +38,17 @@ db.serialize(function () {
 	 */
 	db.run("CREATE TABLE IF NOT EXISTS cart (userid INTEGER, item TEXT, amount INTEGER)");
 });
+// process env == test
+if (process.env.NODE_ENV === "test") {
+    //add test user
+    const crypto = require("crypto");
+    let pw = crypto.createHash("sha256").update("test").digest("hex");
+    db.run("INSERT INTO users (username, password, address, zipCode, city, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?, ?)", ["testname", pw, "test", "test", "21312", "test", "test"], (err) => {
+        if (err) {
+            console.log("Error: " + err);
+        }
+    });
+}
 
 //find file baed on name form root
 const fs = require("fs");
@@ -71,6 +82,8 @@ items.forEach((item, i) => {
 	let defaultItem = {
 		name: null,
 		description: null,
+        behavior: null,
+        habitatSize: null,
 		feed: null,
 		breeding: null,
 		count: null,
@@ -100,7 +113,7 @@ items.forEach((item, i) => {
 	item.img = split.slice(2).join("/");
 	let sql = "";
 	if (item.feed) {
-		sql = `INSERT INTO items (name, price, img, majorCategory, subCategory, description, feed, breeding, count, size, origin, phMin, phMax, tempMin, tempMax, h2OHardness) 
+		sql = `INSERT INTO items (name, price, img, majorCategory, subCategory, description, behavior, habitatSize, feed, breeding, count, size, origin, phMin, phMax, tempMin, tempMax, h2OHardness) 
     VALUES (
         '${item.name}',
         ${item.price},
@@ -108,6 +121,8 @@ items.forEach((item, i) => {
         '${item.majorCategory}',
         '${item.subCategory}',
         '${item.description}',
+        '${item.act}',
+        ${item.aquaSize},
         '${item.feed}',
         '${item.breeding}',
         '${item.count}',
@@ -137,7 +152,11 @@ items.forEach((item, i) => {
             console.log(sql);
         }
     });
-
+    db.run("INSERT INTO stock (item, amount) VALUES (?, ?)", [item.name, Math.floor(Math.random() * 100) + 1], (err) => {
+        if (err) {
+            console.log("Error: " + err);
+        }
+    });
 	
 });
 });

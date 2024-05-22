@@ -6,6 +6,8 @@
  * @property {Categories} category
  * @property {SubCategory} subCategory
  * @property {string} description
+ * @property {number} habitatSize
+ * @property {string} behavior
  * @property {string} feed
  * @property {string} breeding
  * @property {string} count

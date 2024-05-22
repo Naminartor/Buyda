@@ -32,7 +32,22 @@ module.exports = function (app) {
 			});
 		}
 	});
-	app.get("/api/item/:name", (req, res) => {
+	app.get("/api/items/search", (req, res) => {
+		console.log(req.query)
+		const query = req.query.query;
+		const limit = req.query.limit;
+		const offset = req.query.offset;
+		db.all(`SELECT * FROM items WHERE name LIKE '%${query}%' LIMIT ${limit} OFFSET ${offset}`, (err, rows) => {
+			if (err) {
+				console.log(err)
+				res.status(500).send();
+			} else {
+				console.log("rows", rows)
+				res.send(rows);
+			}
+		});
+	});
+	app.get("/api/items/:name", (req, res) => {
 		const itemName = req.params.name;
 		db.get(`SELECT * FROM items WHERE name = "${itemName}"`, (err, row) => {
 			if (err) {
@@ -46,32 +61,49 @@ module.exports = function (app) {
 
 	app.get("/api/item/:name/stock", (req, res) => {
 		const itemName = req.params.name;
-		db.get(`SELECT stock FROM items WHERE name = "${itemName}"`, (err, row) => {
+		db.get(`SELECT amount FROM stock WHERE item = "${itemName}"`, (err, row) => {
 			if (err) {
-				res.status(401).send();
+				console.log(err)
+				res.status(500).send();
 			} else {
-				res.send(row.stock.toString());
+				res.send(row.amount.toString());
 			}
 		});
 	});
+
 	app.get("/api/items", (req, res) => {
 		const limit = req.query.limit;
 		const offset = req.query.offset;
-		const category = req.query.category;
-		const subcategory = req.query.subcategory;
+		/**@type {Array|null} */
+		const category = req.query.majorCategory?.split(',');
+		/**@type {Array|null} */
+		const subcategory = req.query.subCategory?.split(',');
 
 		let query = `SELECT * FROM items`;
-
+		let where = false;
 		if (category) {
-			query += ` WHERE category = "${category}"`;
+			category.forEach((cat, i) => {
+				if (i === 0) {
+					where = true;
+					query += ` WHERE majorCategory = "${cat}"`;
+				} else {
+					query += ` OR majorCategory = "${cat}"`;
+				}
+			});
 		}
-
 		if (subcategory) {
-			if (category) {
-				query += ` AND subcategory = "${subcategory}"`;
+			if (where) {
+				query += " AND";
 			} else {
-				query += ` WHERE subcategory = "${subcategory}"`;
+				query += " WHERE";
 			}
+			subcategory.forEach((subcat, i) => {
+				if (i === 0) {
+					query += ` subCategory = "${subcat}"`;
+				} else {
+					query += ` OR subCategory = "${subcat}"`;
+				}
+			});
 		}
 
 		if (limit) {
@@ -81,7 +113,7 @@ module.exports = function (app) {
 		if (offset) {
 			query += ` OFFSET ${offset}`;
 		}
-
+		console.log(query)
 		db.all(query, (err, rows) => {
 			if (err) {
 				res.status(500).send();
@@ -91,7 +123,7 @@ module.exports = function (app) {
 		});
 	});
 	app.get("/api/categories", (req, res) => {
-		db.all(`SELECT DISTINCT majorCategory FROM items`, (err, rows) => {
+		db.all(`SELECT DISTINCT majorCategory FROM items ASC`, (err, rows) => {
 			if (err) {
 				res.status(404).send();
 			} else {
@@ -172,6 +204,13 @@ module.exports = function (app) {
 						}
 					}
 				);
+				db.run(`UPDATE amount FROM stock WHERE item = '${item}'`, (err) => {
+					if (err) {
+						res.status(500).send();
+					} else {
+						res.send("Item removed from cart successfully");
+					}
+				});
 			}
 		});
 	});
