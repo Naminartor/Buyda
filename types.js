@@ -5,6 +5,17 @@
  * @property {number} price
  * @property {Categories} category
  * @property {SubCategory} subCategory
+ * @property {string} description
+ * @property {string} feed
+ * @property {string} breeding
+ * @property {string} count
+ * @property {string} size
+ * @property {string} origin
+ * @property {number} phMin
+ * @property {number} phMax
+ * @property {number} tempMin
+ * @property {number} tempMax
+ * @property {string} h2OHardness
  */
 /**
  * @typedef {Object} Order

@@ -142,7 +142,7 @@ const api = {
     },
     getAccount: async function() {
         try {
-            const response = await fetch('/api/user');
+            const response = await this.authFetch('/api/user');
             const data = await response.json();
             return data;
         } catch (error) {

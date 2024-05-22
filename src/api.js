@@ -32,12 +32,13 @@ module.exports = function (app) {
 			});
 		}
 	});
-	app.get("/item/:name", (req, res) => {
+	app.get("/api/item/:name", (req, res) => {
 		const itemName = req.params.name;
 		db.get(`SELECT * FROM items WHERE name = "${itemName}"`, (err, row) => {
 			if (err) {
 				res.status(500).send();
 			} else {
+				
 				res.send(row);
 			}
 		});
@@ -53,7 +54,7 @@ module.exports = function (app) {
 			}
 		});
 	});
-	app.get("/items", (req, res) => {
+	app.get("/api/items", (req, res) => {
 		const limit = req.query.limit;
 		const offset = req.query.offset;
 		const category = req.query.category;
@@ -90,21 +91,23 @@ module.exports = function (app) {
 		});
 	});
 	app.get("/api/categories", (req, res) => {
-		db.all(`SELECT DISTINCT category FROM items`, (err, rows) => {
+		db.all(`SELECT DISTINCT majorCategory FROM items`, (err, rows) => {
 			if (err) {
 				res.status(404).send();
 			} else {
-				res.send(rows.map((row) => row.category));
+				console.log(rows)
+				res.send(rows.map((row) => row.majorCategory));
 			}
 		});
 	});
 	app.get("/api/categories/:category", (req, res) => {
 		const category = req.params.category;
-		db.all(`SELECT DISTINCT subcategory FROM items WHERE category = "${category}"`, (err, rows) => {
+		db.all(`SELECT DISTINCT subCategory FROM items WHERE majorCategory = "${category}"`, (err, rows) => {
 			if (err) {
+				console.log(err)
 				res.status(500).send();
 			} else {
-				res.send(rows.map((row) => row.subcategory));
+				res.send(rows.map((row) => row.subCategory));
 			}
 		});
 	});
