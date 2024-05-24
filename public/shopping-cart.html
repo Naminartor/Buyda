@@ -53,7 +53,7 @@
 
 						<form>
 							<div class="input-group justify-content-end">
-								<button type="submit" class="btn btn-primary">Buy</button>
+								<button id="buy" type="submit" class="btn btn-primary">Buy</button>
 							</div>
 						</form>
 					</div>
@@ -62,10 +62,10 @@
 					<li class="list-group-item bg-body-secondary">
 						<div class="row">
 							<div class="col-sm-auto">
-								<img class="b-img" alt="avatar1" src="BuydaDaten/Bilder/Bärblinge/Zebrabärblig.jpg" />
+								<img class="b-img" alt="avatar1" src="" />
 							</div>
 							<div class="col-lg-auto">
-								<p class="mid">Item</p>
+								<p class="name mid">Item</p>
 							</div>
 							<div class="col">
 								<p class="mid text-end"><span class="amount"></span> x <span class="price"></span></p>
@@ -83,8 +83,9 @@
 						items.forEach(order => {
 							const template = $('#item-template').html();
 							const $item = $(template);
-							$item.find('img').attr('src', order.item.image);
-							$item.find('p .mid').text(order.item.name);
+							console.log(order);
+							$item.find('img').attr('src', order.img);
+							$item.find('p.name').text(order.name);
 							$item.find('.price').text(order.price + CONSTANTS.CURRENCY);
 							$item.find('.amount').text(order.amount);
 							sum += order.price * order.amount;
@@ -99,6 +100,16 @@
 						$('#cart').find('button').click(() => {
 							api.checkout();
 							window.location.href = 'bestellung';
+						});
+						$('#buy').click((e) => {
+							e.preventDefault();
+							e.stopPropagation();
+							if(api.checkout()){
+								//window.location.href = 'thank-you';
+							}else{
+								alert('Something went wrong');
+							}
+							
 						});
 					});
 

@@ -67,7 +67,7 @@ const api = {
      */
     getItemByName: async function(name) {
         try {
-            const response = await fetch(`/api/items/${name}`);
+            const response = await fetch(`/api/item/${name}`);
             const data = await response.json();
             // Process the data or return it as needed
             return data;
@@ -103,7 +103,20 @@ const api = {
      */
     getItems: async function(opt) {
         try {
-            const response = await fetch(`/api/items?limit=${opt.limit}&offset=${opt.offset}&majorCategory=${opt.majorCategory}&subCategory=${opt.subCategory}`);
+            url = '/api/items?'
+            if (opt.limit) {
+                url += `limit=${opt.limit}&`
+            }
+            if (opt.offset) {
+                url += `offset=${opt.offset}&`
+            }
+            if (opt.majorCategory) {
+                url += `majorCategory=${opt.majorCategory}&`
+            }
+            if (opt.subCategory) {
+                url += `subCategory=${opt.subCategory}`
+            }
+            const response = await fetch(url);
             const data = await response.json();
             // Process the data or return it as needed
             return data;
@@ -121,6 +134,21 @@ const api = {
             console.error('Error:', error);
         }
     },
+    addCart: async function(item, amount) {
+        try {
+            const response = await this.authFetch('/api/user/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item, amount }),
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
     updateCart: async function(item, amount) {
         try {
             const response = await this.authFetch('/api/user/cart/update', {
@@ -130,8 +158,9 @@ const api = {
                 },
                 body: JSON.stringify({ item, amount }),
             });
-            const data = await response.json();
-            return data;
+            if (response.status === 200) {
+                return true;
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -145,8 +174,9 @@ const api = {
                 },
                 body: JSON.stringify({ item }),
             });
-            const data = await response.json();
-            return data;
+            if (response.status === 200) {
+                return true;
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -165,10 +195,13 @@ const api = {
             const response = await this.authFetch('/api/user/checkout', {
                 method: 'POST',
             });
-            const data = await response.json();
-            return data;
+            if (response.status === 200) {
+                return true;
+            }
+            return false;
         } catch (error) {
             console.error('Error:', error);
+            return false
         }
     },
     getAccount: async function() {
@@ -176,6 +209,56 @@ const api = {
             const response = await this.authFetch('/api/user');
             const data = await response.json();
             return data;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    updateAccount: async function(user) {
+        try {
+            const response = await this.authFetch('/api/user/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+            if (response.status === 200) {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    updateAddress: async function(address) {
+        try {
+            const response = await this.authFetch('/api/user/address', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(address),
+            });
+            if (response.status === 200) {
+                return true;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    updatePassword: async function(password) {
+        try {
+            const response = await this.authFetch('/api/user/password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(password),
+            });
+            if (response.status === 200) {
+                return true;
+            }else{
+                return false
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -190,6 +273,44 @@ const api = {
         } catch (error) {
             console.error('Error:', error);
         }
+    },
+    signin: async function(username, password) {
+        try {
+            const response = await fetch('/api/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+            if (response.status === 200) {
+                window.location.replace('/account');
+            }else{
+                return false
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        return true
+    },
+    signup: async function(user) {
+        try {
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+            if (response.status === 200) {
+                window.location.replace('/signin');
+            }else{
+                return false
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        return true
     },
 };
 

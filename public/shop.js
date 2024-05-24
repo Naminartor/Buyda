@@ -34,10 +34,12 @@ $(document).ready(async () => {
     }
     
     const urlParams = new URLSearchParams( window.location.search);
-    const mcats = urlParams.getAll("mcat");
-    const scats = urlParams.getAll("scat");
-    const search = urlParams.get("search");
+    let mcats = urlParams.getAll("mcat");
+    let scats = urlParams.getAll("scat") ;
+    const search = urlParams.get("search") ;
     
+    if (mcats.length === 0) mcats = undefined;
+    if (scats.length === 0) scats = undefined;
     console.log(mcats);
     const categories = await api.getMajorCategories();
     const $filter = $("#filter-list");
@@ -47,7 +49,7 @@ $(document).ready(async () => {
         const $entry = $("<p></p>").append($("#filter-entry").html())
         $entry.find("label").attr("for", `filter-${mcat}`);
         $entry.find("input").attr("id", `filter-${mcat}`);
-        if (mcats.includes(mcat)) {
+        if (!mcats || mcats.includes(mcat)) {
             $entry.find("input").attr("checked", "checked");
         }
         $entry.find("input").attr("name", `m-${mcat}`);
@@ -58,7 +60,7 @@ $(document).ready(async () => {
             $subentry.find("label").attr("for", `filter-${scat}`);
             $subentry.find("input").attr("id", `filter-${scat}`);
             $subentry.find("input").attr("name", `s-${scat}`);
-            if (scats.includes(scat)) {
+            if (!scats || scats.includes(scat)) {
                 $subentry.find("input").attr("checked", "checked");
             }
             $subentry.find("span").text(scat);

@@ -99,8 +99,8 @@
 						<h1 class="h3 mb-3 fw-normal">Please sign up</h1>
 
 						<div class="form-floating mb-3">
-							<input type="text" class="form-control" id="floatingInput" placeholder="" />
-							<label for="floatingInput">Username</label>
+							<input type="text" class="form-control" id="username" placeholder="" />
+							<label for="username">Username</label>
 						</div>
 						<div class="form-floating mb-3">
 							<input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
@@ -114,39 +114,59 @@
 						<div class="row mb-3 mt-4">
 							<div class="col pe-0">
 								<div class="form-floating">
-									<input type="text" class="form-control" id="floatingInput" placeholder="" />
-									<label for="floatingInput">First Name</label>
+									<input type="text" class="form-control" id="firstName" placeholder="" />
+									<label for="firstName">First Name</label>
 								</div>
 							</div>
 							<div class="col ps-0">
 								<div class="form-floating">
-									<input type="text" class="form-control" id="floatingInput" placeholder="" />
-									<label for="floatingInput">Last Name</label>
+									<input type="text" class="form-control" id="lastName" placeholder="" />
+									<label for="lastName">Last Name</label>
 								</div>
 							</div>
 						</div>
 
 						<div class="form-floating mb-2">
-							<input type="text" class="form-control" id="floatingInput" placeholder="" />
-							<label for="floatingInput">Address</label>
+							<input type="text" class="form-control" id="adress" placeholder="" />
+							<label for="adress">Address</label>
 						</div>
 						<div class="row">
 							<div class="col pe-0">
 								<div class="form-floating">
-									<input type="text" class="form-control" id="floatingInput" placeholder="" />
-									<label for="floatingInput">Zip-Code</label>
+									<input type="text" class="form-control" id="zipCode" placeholder="" />
+									<label for="zipCode">Zip-Code</label>
 								</div>
 							</div>
 							<div class="col ps-0">
 								<div class="form-floating">
-									<input type="text" class="form-control" id="floatingInput" placeholder="" />
-									<label for="floatingInput">City</label>
+									<input type="text" class="form-control" id="city" placeholder="" />
+									<label for="city">City</label>
 								</div>
 							</div>
 						</div>
-						<button class="btn btn-primary w-100 mt-5 py-2" type="submit">Sign up</button>
+						<button id="signup"class="btn btn-primary w-100 mt-5 py-2" type="submit">Sign up</button>
 					</form>
 				</div>
+				<script>
+					$(document).ready(async ()=>{
+						$("#signup").click(async (event)=>{
+							event.preventDefault()
+							event.stopPropagation()
+							const username = $("#username").val()
+							const password = $("#floatingPassword").val()
+							const firstName = $("#firstName").val()
+							const lastName = $("#lastName").val()
+							const address = $("#adress").val()
+							const zipCode = $("#zipCode").val()
+							const city = $("#city").val()
+
+							const response = await api.signup({username, password, firstName, lastName, address, zipCode, city})
+							if(response.status == 200){
+								window.location.href = "signin"
+							}
+						})
+					})
+				</script>
 			</main>
 			<footer></footer>
 		</div>

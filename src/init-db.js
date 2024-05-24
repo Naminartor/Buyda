@@ -16,12 +16,12 @@ db.serialize(function () {
 	/**
 	 * Create a new table named 'orders; with @type {Order}
 	 */
-	db.run("CREATE TABLE IF NOT EXISTS orders (userid INTEGER, item TEXT, amount INTEGER, price REAL, date TEXT)");
+	db.run("CREATE TABLE IF NOT EXISTS orders (userid INTEGER, item TEXT, amount INTEGER, price REAL, timestamp TEXT)");
 
 	/**
 	 * Create a new table named 'User; with @type {User}
 	 */
-	db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER, username TEXT, password TEXT, address TEXT, zipCode TEXT, city TEXT, firstName TEXT, lastName TEXT)");
+	db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, address TEXT, zipCode TEXT, city TEXT, firstName TEXT, lastName TEXT)");
 
 	/**
 	 * Create a new table named 'sessions; with @type {Sessions}
@@ -40,7 +40,7 @@ db.serialize(function () {
 });
 // process env == test
 if (process.env.NODE_ENV === "test") {
-    //add test user
+    console.log("Creating test user");
     const crypto = require("crypto");
     let pw = crypto.createHash("sha256").update("test").digest("hex");
     db.run("INSERT INTO users (username, password, address, zipCode, city, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?, ?)", ["testname", pw, "test", "test", "21312", "test", "test"], (err) => {

@@ -39,32 +39,42 @@
 							</div>
 						</div>
 						<div class="col-12 b-split-t">
-							<button class="btn btn-primary center" type="submit">Buy Again</button>
+							<button class="rebuy btn btn-primary center" type="submit">Buy Again</button>
 						</div>
         </template>
         <script>
           $(document).ready(async () => {
+			const epsilon = 100
             let last_date = null
             const orders = await api.getOrderHistory()
             for (let i = 0; i < orders.length; i) {
               $orders = $('<p></p>').append($('#order-template').html())
-			$orders.find("h3 span").text(new Date(orders[i].date).toLocaleDateString())
+			  
+			  const date =new Date(parseFloat(orders[i].timestamp))
+				$orders.find("h3 span").text(date.toLocaleDateString())
+				const rebuy = []
               do {
               const order = orders[i];
-              $order = $('<p></p>').append($('#order-slot-template').html())
+			  rebuy.push(order)
+              let $order = $('<p></p>').append($('#order-slot-template').html())
               //$order.find("img").attr("src", order.item.image)
-              $order.find("p").text(`${order.item.name} / ${order.item.price.toFixed(2)}${CONSTANTS.CURRENCY}`)
-              $order.find("button").click(() => {
-                api.addToCart(order.item.id, order.amount);
-                window.location.href = "shopping-cart.html";
-              })
+              $order.find("p").text(`${order.name} / ${order.price.toFixed(2)}${CONSTANTS.CURRENCY}`)
+			  $order.find('img').attr('src', order.img)
+			  
               $orders.find(".divider").append($order.html())
             
-              last_date =order.date
+              last_date =order.timestamp
               i++
               
-              }while (i < orders.length && orders[i].date === last_date)
-              $('#orders').append($orders.html())
+              }while (i < orders.length && orders[i].timestamp - last_date< epsilon)
+              $order = $('#orders').append($orders.html()).children().last()
+			  $order.find(".rebuy").click(async () => {
+				for (const order of rebuy) {
+					console.log(order)
+                	await api.addCart(order.item, order.amount);
+				};
+                window.location.href = "shopping-cart";
+              })
               
             }
           });

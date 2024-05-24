@@ -25,7 +25,7 @@
 							<p class="h1 align-middle">Benutzername</p>
 						</div>
 					</div>
-					<div class="box">
+					<div id="user-data"class="box">
 						<h1>User</h1>
 						<div class="input-group mb-3">
 							<input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
@@ -45,7 +45,7 @@
 						</div>
 						<button class="btn btn-primary center" type="submit">Save</button>
 					</div>
-					<div class="box">
+					<div class="box" id="password">
 						<div>
 							<h1>Password</h1>
 							<div flex-row>
@@ -84,17 +84,37 @@
 					</div>
 				</div>
 				<script>
-					(async ()=>{
+					$(document).ready(async() => {
 						const account = await api.getAccount()
-						$(document).ready(() =>{
+						console.log(account)
 						$("input[placeholder='Username']").val(account.username)
-						$("input[placeholder='Vorname']").val(account.firstname)
-						$("input[placeholder='Nachname']").val(account.lastname)
+						$("input[placeholder='Vorname']").val(account.firstName)
+						$("input[placeholder='Nachname']").val(account.lastName)
 						$("input[placeholder='Addresse']").val(account.address)
-						$("input[placeholder='Postleitzahl']").val(account.zip)
+						$("input[placeholder='Postleitzahl']").val(account.zipCode)
 						$("input[placeholder='Stadt']").val(account.city)
-					});
-					})();
+						$('#user-data button').click(() => {
+							const username = $("input[placeholder='Username']").val()
+							const firstName = $("input[placeholder='Vorname']").val()
+							const lastName = $("input[placeholder='Nachname']").val()
+							api.updateAccount({username, firstName, lastName})
+						})
+						$('#address button').click(() => {
+							const address = $("input[placeholder='Addresse']").val()
+							const zipCode = $("input[placeholder='Postleitzahl']").val()
+							const city = $("input[placeholder='Stadt']").val()
+							api.updateAddress({address, zipCode, city})
+						});
+						$('#password button').click(() => {
+							const currentPassword = $("input[placeholder='Current Password']").val()
+							const newPassword = $("input[placeholder='New Password']").val()
+							if(api.updatePassword({currentPassword, newPassword})) {
+								alert('Password changed')
+							}else{
+								alert('Password change failed')
+							}
+						})
+					})
 				</script>
 			</main>
 			<footer>

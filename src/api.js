@@ -1,13 +1,25 @@
-const { DB } = require("./constants");
+const { DB, sessionTimeout } = require("./constants");
 const sqlite3 = require("sqlite3");
 const crypto = require("crypto");
-const sessionTimeout = require("./constants").SESSION_TIMEOUT;
 const db = new sqlite3.Database(DB);
 
 module.exports = function (app) {
-    app.use(["/api/user", "/api/user/*"], (req, res, next) => {
+	//update session timestamp
+	app.use((req, res, next) => {
 		const sessionid = req.cookies?.sessionid;
-        console.log(sessionid)
+		const currentTime = Date.now();
+		if (sessionid) {
+			db.run(`UPDATE sessions SET timestamp = ${currentTime} WHERE sessionid = '${sessionid}' AND timestamp > ${currentTime - sessionTimeout}`, (err) => {
+				next();
+			});
+		} else {
+			next();
+		}
+	});
+
+	app.use(["/api/user", "/api/user/*"], (req, res, next) => {
+		const sessionid = req.cookies?.sessionid;
+		console.log(sessionid);
 		if (!sessionid) {
 			res.status(401).send();
 		} else {
@@ -16,13 +28,15 @@ module.exports = function (app) {
 					res.status(500).send();
 				} else {
 					if (row) {
+						const currentTime = Date.now();
 						const sessionTimestamp = row.timestamp;
-
-						if (currentTime - sessionTimestamp > sessionTimeout) {
+						if (currentTime - sessionTimestamp > sessionTimeout * 1000) {
 							res.clearCookie("sessionid");
 							res.status(401).send();
+							db.run(`DELETE FROM sessions WHERE sessionid = "${sessionid}"`);
 						} else {
-							req.params.userid = row.userid;
+							//inject userid into request
+							req.userid = row.userid;
 							next();
 						}
 					} else {
@@ -33,27 +47,26 @@ module.exports = function (app) {
 		}
 	});
 	app.get("/api/items/search", (req, res) => {
-		console.log(req.query)
+		console.log(req.query);
 		const query = req.query.query;
 		const limit = req.query.limit;
 		const offset = req.query.offset;
 		db.all(`SELECT * FROM items WHERE name LIKE '%${query}%' LIMIT ${limit} OFFSET ${offset}`, (err, rows) => {
 			if (err) {
-				console.log(err)
+				console.log(err);
 				res.status(500).send();
 			} else {
-				console.log("rows", rows)
+				console.log("rows", rows);
 				res.send(rows);
 			}
 		});
 	});
-	app.get("/api/items/:name", (req, res) => {
+	app.get("/api/item/:name", (req, res) => {
 		const itemName = req.params.name;
 		db.get(`SELECT * FROM items WHERE name = "${itemName}"`, (err, row) => {
 			if (err) {
 				res.status(500).send();
 			} else {
-				
 				res.send(row);
 			}
 		});
@@ -63,7 +76,7 @@ module.exports = function (app) {
 		const itemName = req.params.name;
 		db.get(`SELECT amount FROM stock WHERE item = "${itemName}"`, (err, row) => {
 			if (err) {
-				console.log(err)
+				console.log(err);
 				res.status(500).send();
 			} else {
 				res.send(row.amount.toString());
@@ -75,9 +88,9 @@ module.exports = function (app) {
 		const limit = req.query.limit;
 		const offset = req.query.offset;
 		/**@type {Array|null} */
-		const category = req.query.majorCategory?.split(',');
+		const category = req.query.majorCategory?.split(",");
 		/**@type {Array|null} */
-		const subcategory = req.query.subCategory?.split(',');
+		const subcategory = req.query.subCategory?.split(",");
 
 		let query = `SELECT * FROM items`;
 		let where = false;
@@ -85,11 +98,14 @@ module.exports = function (app) {
 			category.forEach((cat, i) => {
 				if (i === 0) {
 					where = true;
-					query += ` WHERE majorCategory = "${cat}"`;
+					query += ` WHERE (majorCategory = "${cat}"`;
 				} else {
 					query += ` OR majorCategory = "${cat}"`;
 				}
 			});
+			if (where) {
+				query += ")";
+			}
 		}
 		if (subcategory) {
 			if (where) {
@@ -113,7 +129,7 @@ module.exports = function (app) {
 		if (offset) {
 			query += ` OFFSET ${offset}`;
 		}
-		console.log(query)
+		console.log(query);
 		db.all(query, (err, rows) => {
 			if (err) {
 				res.status(500).send();
@@ -127,7 +143,7 @@ module.exports = function (app) {
 			if (err) {
 				res.status(404).send();
 			} else {
-				console.log(rows)
+				console.log(rows);
 				res.send(rows.map((row) => row.majorCategory));
 			}
 		});
@@ -136,29 +152,60 @@ module.exports = function (app) {
 		const category = req.params.category;
 		db.all(`SELECT DISTINCT subCategory FROM items WHERE majorCategory = "${category}"`, (err, rows) => {
 			if (err) {
-				console.log(err)
+				console.log(err);
 				res.status(500).send();
 			} else {
 				res.send(rows.map((row) => row.subCategory));
 			}
 		});
 	});
-
-	app.post("/api/user/cart/update", (req, res) => {
-		const userid = req.body.userid;
+	app.post("/api/user/cart/add", (req, res) => {
+		const userid = req.userid;
 		const item = req.body.item;
 		const amount = req.body.amount;
-		db.run(`INSERT INTO cart (userid, item, amount) VALUES (?, ?, ?)`, [userid, item, amount], (err) => {
+		db.get(`SELECT amount FROM cart WHERE userid = "${userid}" AND item = "${item}"`, (err, row) => {
 			if (err) {
 				res.status(500).send();
 			} else {
-				res.send("Item added to cart successfully");
+				if (row) {
+					db.run(`UPDATE cart SET amount = "${row.amount + amount}" WHERE userid = "${userid}" AND item = "${item}"`, (err) => {
+						if (err) {
+							res.status(500).send();
+						} else {
+							res.send("Item added to cart successfully");
+						}
+					});
+				} else {
+					db.run(`INSERT INTO cart (userid, item, amount) VALUES (?, ?, ?)`, [userid, item, amount], (err) => {
+						if (err) {
+							res.status(500).send();
+						} else {
+							res.send("Item added to cart successfully");
+						}
+					});
+				}
+			}
+		});
+	});
+	app.post("/api/user/cart/update", (req, res) => {
+		const userid = req.userid;
+		const item = req.body.item;
+		const amount = req.body.amount;
+		db.run(`UPDATE cart SET amount = "${amount}" WHERE userid = "${userid}" AND item = "${item}"`, (err) => {
+			if (err) {
+				db.run(`INSERT INTO cart (userid, item, amount) VALUES (?, ?, ?)`, [userid, item, amount], (err) => {
+					if (err) {
+						res.status(500).send();
+					} else {
+						res.send("Item added to cart successfully");
+					}
+				});
 			}
 		});
 	});
 
 	app.post("/api/user/cart/delete", (req, res) => {
-		const userid = req.body.userid;
+		const userid = req.userid;
 		const item = req.body.item;
 		db.run(`DELETE FROM cart WHERE userid = "${userid}" AND item = "${item}"`, (err) => {
 			if (err) {
@@ -170,8 +217,8 @@ module.exports = function (app) {
 	});
 
 	app.get("/api/user/cart/", (req, res) => {
-		const userid = req.params.userid;
-		db.all(`SELECT * FROM cart WHERE userid = "${userid}"`, (err, rows) => {
+		const userid = req.userid;
+		db.all(`SELECT * FROM cart JOIN items ON cart.item = items.name WHERE userid = "${userid}"`, (err, rows) => {
 			if (err) {
 				res.status(500).send();
 			} else {
@@ -180,44 +227,56 @@ module.exports = function (app) {
 		});
 	});
 
-	app.get("/api/user/checkout", (req, res) => {
-		const username = req.params.username;
-		db.all(`SELECT * FROM cart WHERE username = "${username}"`, (err, rows) => {
+	app.post("/api/user/checkout", (req, res) => {
+		const username = req.userid
+		db.all(`SELECT * FROM cart WHERE userid = "${username}"`, (err, rows) => {
 			if (err) {
 				res.status(500).send();
 			} else {
 				const order = rows.map((row) => ({
 					item: row.item,
 					amount: row.amount,
-					username: row.username,
+					username: row.userid,
 				}));
-
-				const timestamp = Date.now();
-				db.run(
-					`INSERT INTO orders (item, amount, username, timestamp) VALUES (?, ?, ?, ?)`,
-					order.map((o) => [o.item, o.amount, o.username, timestamp]),
-					(err) => {
+				db.serialize(() => {
+					const timestamp = Date.now();
+					db.run(
+						`INSERT INTO orders (item, amount, userid, timestamp) VALUES (?, ?, ?, ?)`,
+						order.map((o) => [o.item, o.amount, o.username, timestamp]).flat(),
+						(err) => {
+							if (err) {
+								res.status(500).send();
+							}
+						}
+					);
+					//update stock
+					order.forEach((o) => {
+						db.get(`SELECT amount FROM stock WHERE item = "${o.item}"`, (err, row) => {
+							if (err) {
+								res.status(500).send();
+							} else {
+								db.run(`UPDATE stock SET amount = "${row.amount - o.amount}" WHERE item = "${o.item}"`, (err) => {
+									if (err) {
+										res.status(500).send();
+									}
+								});
+							}
+						});
+					});
+					db.run(`DELETE FROM cart WHERE userid = "${username}"`, (err) => {
 						if (err) {
 							res.status(500).send();
-						} else {
-							res.redirect("/thank-you");
 						}
-					}
-				);
-				db.run(`UPDATE amount FROM stock WHERE item = '${item}'`, (err) => {
-					if (err) {
-						res.status(500).send();
-					} else {
-						res.send("Item removed from cart successfully");
-					}
+					});
+					res.status(200).send();
 				});
 			}
 		});
 	});
 
 	app.get("/api/user/orders/", (req, res) => {
-		const userid = req.params.userid;
-		db.all(`SELECT * FROM orders WHERE userid = "${userid}"`, (err, rows) => {
+		const userid = req.userid;
+		db.all(`SELECT * FROM orders JOIN items ON orders.item = items.name WHERE userid = "${userid}"`, (err, rows) => {
 			if (err) {
 				res.status(500).send();
 			} else {
@@ -227,8 +286,8 @@ module.exports = function (app) {
 	});
 
 	app.get("/api/user", (req, res) => {
-		const userid = req.params.userid;
-		db.get(`SELECT * FROM users WHERE userid = "${userid}"`, (err, row) => {
+		const userid = req.userid;
+		db.get(`SELECT * FROM users WHERE id = "${userid}"`, (err, row) => {
 			if (err) {
 				res.status(500).send();
 			} else {
@@ -245,16 +304,16 @@ module.exports = function (app) {
 			const hashedCurrentPassword = crypto.createHash("sha256").update(currentPassword).digest("hex");
 			const hashedNewPassword = crypto.createHash("sha256").update(newPassword).digest("hex");
 
-			db.get(`SELECT * FROM users WHERE userid = "${userid}" AND password = "${hashedCurrentPassword}"`, (err, row) => {
+			db.get(`SELECT * FROM users WHERE id = "${userid}" AND password = "${hashedCurrentPassword}"`, (err, row) => {
 				if (err) {
 					res.status(500).send();
 				} else {
 					if (row) {
-						db.run(`UPDATE users SET password = "${hashedNewPassword}" WHERE userid = "${userid}"`, (err) => {
+						db.run(`UPDATE users SET password = "${hashedNewPassword}" WHERE id = "${userid}"`, (err) => {
 							if (err) {
 								res.status(500).send();
 							} else {
-								res.send("Password updated successfully");
+								res.status(200).send();
 							}
 						});
 					} else {
@@ -266,27 +325,27 @@ module.exports = function (app) {
 	});
 
 	app.post("/api/user/update", (req, res) => {
-		const userid = req.body.userid;
+		const userid = req.userid;
 		const username = req.body.username;
 		const firstName = req.body.firstName;
 		const lastName = req.body.lastName;
 
-		db.run(`UPDATE users SET username = "${username}", firstName = "${firstName}", lastName = "${lastName}" WHERE userid = "${userid}"`, (err) => {
+		db.run(`UPDATE users SET username = '${username}', firstName = '${firstName}', lastName = '${lastName}' WHERE id = "${userid}"`, (err) => {
 			if (err) {
 				res.status(500).send();
 			} else {
-				res.send("User updated successfully");
+				res.status(200).send();
 			}
 		});
 	});
 
-	app.post("/api/user/adress", (req, res) => {
-		const userid = req.body.userid;
+	app.post("/api/user/address", (req, res) => {
+		const userid = req.userid;
 		const address = req.body.address;
 		const zipCode = req.body.zipCode;
 		const city = req.body.city;
 
-		db.run(`UPDATE users SET address = "${address}", zipCode = "${zipCode}", city = "${city}" WHERE userid = "${userid}"`, (err) => {
+		db.run(`UPDATE users SET address = "${address}", zipCode = "${zipCode}", city = "${city}" WHERE id = "${userid}"`, (err) => {
 			if (err) {
 				res.status(500).send();
 			} else {
@@ -298,13 +357,13 @@ module.exports = function (app) {
 	app.post("/api/signup", (req, res) => {
 		const username = req.body.username;
 		const password = req.body.password;
-		const email = req.body.email;
-		const age = req.body.age;
 		const address = req.body.address;
 		const city = req.body.city;
-		const zip = req.body.zip;
+		const zip = req.body.zipCode;
+		const firstName = req.body.firstName;
+		const lastName = req.body.lastName;
 		const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
-		db.run(`INSERT INTO users (username, password, email, age, address, city, zip) VALUES (?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, email, age, address, city, zip], (err) => {
+		db.run(`INSERT INTO users (username, password, address, zipCode, city, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, address, zip, city,firstName, lastName], (err) => {
 			if (err) {
 				res.status(500).send();
 			} else {
@@ -323,23 +382,17 @@ module.exports = function (app) {
 			} else {
 				if (row) {
 					const sessionid = crypto.randomBytes(16).toString("hex");
-					res.cookie("sessionid", sessionid, { maxAge: sessionTimeout });
-					const currentTime = Date.now();
-					const sessionExpiration = currentTime + sessionTimeout;
-					db.run(`UPDATE sessions SET timestamp = ${sessionExpiration} WHERE sessionid = "${sessionid}"`, (err) => {
-						if (err) {
-							res.status(500).send();
-						} else {
-							res.redirect("/account");
-						}
-					});
-					const timestamp = Date.now();
-					db.run(`INSERT INTO sessions (sessionid, timestamp, username) VALUES (?, ?, ?)`, [sessionid, timestamp, username], (err) => {
-						if (err) {
-							res.status(500).send();
-						} else {
-							res.redirect("/account");
-						}
+					res.cookie("sessionid", sessionid, { maxAge: sessionTimeout * 1000 });
+					db.serialize(() => {
+						const timestamp = Date.now();
+						db.run(`DELETE FROM sessions WHERE userid = ${row.id}`);
+						db.run(`INSERT INTO sessions (sessionid, timestamp, userid) VALUES (?, ?, ?)`, [sessionid, timestamp, row.id], (err) => {
+							if (err) {
+								res.status(500).send();
+							} else {
+								res.status(200).send();
+							}
+						});
 					});
 				} else {
 					res.status(401).send();
@@ -347,7 +400,4 @@ module.exports = function (app) {
 			}
 		});
 	});
-
-    
-	
 };
