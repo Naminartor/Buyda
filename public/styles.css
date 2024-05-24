@@ -1,21 +1,33 @@
 :root {
   --bs-body-bg: #212529;
   --bs-secondary-bg: #343a40;
+  --bs-secondary-color: #63686c;
   --bs-primary: #0D6EFD;
   --bs-font-color: #ffffff;
-}
+  --bs-tertiary-bg-rgb: 23,23,23;
+  --bs-secondary-bg-rgb: 52,54,60;
+  --bs-border-color: #4b5056;
+  --bs-body-color: #f8f9fa;
+  --bs-secondary-rgb: 30,60,98;
 
+}
+.nav-link.active{
+  --bs-nav-underline-link-active-color:var(--bs-primary)
+}
 body {
   background-color: var(--bs-body-bg);
   color: var(--bs-font-color);
 }
+.form-floating > label{
+  --bs-font-color: #63686c;
+  color:var(--bs-font-color);
+
+}
 
 .card{
-  --bs-card-title-color: #f8f9fa;
+  --bs-card-title-color: #f0f0f0;
   --bs-card-color:#f8f9fa;
-}
-.form-control {
-  background-color: white;
+  --bs-card-bg:#343a40;
 }
 .center {
   display: block;
