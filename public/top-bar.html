@@ -1,0 +1,132 @@
+<div class="logo">
+	<img class="center" src="images/logo-dark.png" />
+</div>
+<div id="nav" class="container-fluid p-0 sticky-top">
+	<style>
+		.nav-link {
+			padding-bottom: 6px;
+			padding-top: 4px;
+		}
+	</style>
+	<script>
+		function category_popup_enable(e) {
+			const el = document.getElementById("category_popup");
+			//console.log(el);
+			el.hidden = false;
+		}
+		function category_popup_disable(e) {
+			const el = document.getElementById("category_popup");
+			//console.log(el);
+			el.hidden = true;
+		}
+		function account_popup_enable(e) {
+			const el = document.getElementById("account_popup");
+			//console.log(el);
+			el.hidden = false;
+		}
+		function account_popup_disable(e) {
+			const el = document.getElementById("account_popup");
+			//console.log(el);
+			el.hidden = true;
+		}
+	</script>
+	<nav class="navbar bg-body-tertiary px-5 d-flex flex-row mb-0">
+		<ul class="nav nav-underline">
+			<li class="nav-item">
+				<a class="nav-link fs-5" href="index"> Home</a>
+			</li>
+			<li class="nav-item" onmouseover="category_popup_enable(this)">
+				<a class="nav-link fs-5 active" href="shop">Shop</a>
+			</li>
+		</ul>
+		<div class="flex-grow-1">
+			<div class="w-100 px-3" style="max-width: 50rem">
+				<form id="search" role="search" >
+					<input class="form-control" style="background-color:white" type="search" placeholder="Search" aria-label="Search" />
+				</form>
+			</div>
+		</div>
+		<ul class="nav nav-underline navbar-right">
+			<li class="nav-item">
+				<a class="nav-link fs-5" href="shopping-cart">Shopping Cart</a>
+			</li>
+			<li class="nav-item" onmouseover="account_popup_enable(this)">
+				<a class="nav-link fs-5" href="account">Account</a>
+			</li>
+		</ul>
+	</nav>
+	<div id="category_popup" class="container-fluid bg-body-secondary" onmouseleave="category_popup_disable(this)" hidden style="position: absolute; left: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+		<div class="row text-center"></div>
+	</div>
+	<div id="account_popup" class="container-fluid bg-body-secondary" onmouseleave="account_popup_disable(this)" hidden style="position: absolute; width: 200px; right: 0; z-index: 1000; border-radius: 0 0 30px 30px">
+		<div class="row text-center">
+			<div class="col">
+				<ul class="nav flex-column nav-pills">
+					<li class="nav-item">
+						<a class="nav-link" href="account">My account</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="bestellung">Shopping history</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="account#address">Shoppingadress</a>
+					</li>
+					<li class="nav-item ms-5">
+						<a id="logout" class="nav-link active ps-0 pe-0 mb-2 ms-4" href="#">Logout</a>
+					</li>
+					<li class="nav-item ms-5 ps-0 pe-0 mb-2 ms-4" style="display: none;">
+						<a id="login" class="nav-link active mb-2 ms-5" href="#signin">Login</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<template id="popup-entry">
+	<div class="col">
+		<a class="link-light link-underline-opacity-50 link-underline-opacity-100-hover" href="shop#${key}">${key}</a>
+		<ul class="list-unstyled"></ul>
+	</div>
+</template>
+<template id="popup-subentry">
+	<li class=""><a class="link-light link-underline-opacity-0 link-underline-opacity-100-hover" href="shop#${e}">${e}</a></li>
+</template>
+<script>
+	$(document).ready(async () => {
+		$("nav a.active").removeClass("active");
+		$(`a[href="${window.location.pathname.split("/").pop()}"`).addClass("active");
+		const categories = await api.getMajorCategories();
+		$popup = $("#category_popup .row");
+		categories.forEach(async (mcat) => {
+			subCategories = await api.getSubCategories(mcat);
+			$entry = $("<p></p>").append($("#popup-entry").html())
+			$entry.find("a").attr("href", `shop#${mcat}`);
+			$entry.find("a").text(mcat);
+			subCategories.forEach((scat) => {
+				$subentry = $("<p></p>").append($("#popup-subentry").html());
+				$subentry.find("a").attr("href", `shop?mcat=${mcat}&scat=${scat}`);
+				$subentry.find("a").text(scat);
+				$entry.find("ul").append($subentry.html());
+			});
+			$popup.append($entry.html());
+			let i = 0;
+		});
+		$("#search").submit((e) => {
+			e.preventDefault();
+			const search = $("#search input").val();
+			window.location.href = `shop?search=${search}`;
+		});
+		$("#logout").click((e) => {
+			e.preventDefault();
+			document.cookie = "sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+			window.location.href = "index";
+		});
+		$("#login").click((e) => {
+			e.preventDefault();
+			window.location.href = "signin";
+		});
+		if (!state.user){
+			$("#account_popup").find("li").toggle();
+		}
+	});
+</script>
