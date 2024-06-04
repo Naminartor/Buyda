@@ -30,20 +30,26 @@
 
 					<div class="col" style="width: 380px">
 						<div class="container text-center">
-							<div id="shop-item-container" class="row row-cols-4"></div>
+							<div id="shop-item-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2 pt-4"></div>
 						</div>
 					</div>
 				</div>
 				<template id="item">
-					<div class="col card bg-secondary mb-2 p-1 rounded">
-						<div style="height: 180px; overflow: hidden; position: relative" class="">
-							<img style="overflow: hidden" src="" class="card-img-top" alt="..." />
-						</div>
-						<div class="card-body">
-							<h5 class="card-title text-start">${item}</h5>
-							<a href="item#${item}" class="btn btn-primary float-end text-end"></a>
+					<div class="col  ">
+						<div class="container-fluid  bg-secondary p-1 rounded" style="height: 100%">
+						<div class="card bg-secondary " style="height: 100%">
+							<div style="height: 180px; overflow: hidden; position: relative" class="">
+								<img style="overflow: hidden" src="" class="card-img-top" alt="..." />
+							</div>
+							
+							<div class="card-body">
+								<h5 class="card-title text-start">${item}</h5>
+								<div class="mb-auto"></div>
+								<a href="item#${item}"  class="btn btn-primary float-end text-end"></a>
+							</div>
 						</div>
 					</div>
+				</div>
 				</template>
 				<template id="filter-entry">
 					<li><label class="form-check-label ms-0" for="${key}"><input class="form-check-input me-1 ms-0" data-toggle="toggle" type="checkbox" value="" name="${key}"><span>${key}</span></label><ul class="list-unstyled"></ul></ul></li>

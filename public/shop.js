@@ -11,6 +11,19 @@ async function renderItem(items) {
     });
 }
 $(document).ready(async () => {
+    //responsive change  column count 
+    const changeBorder = ()=>{
+        if (window.innerWidth < 768) {
+            $(".col-auto").attr("class", "col-auto");
+        } else {
+            $(".col-auto").attr("class", "col-auto border-end");
+        }
+       
+    }
+    changeBorder();
+    $(window).resize(changeBorder );
+    
+
      const evalFilter =async (event)=>  {
         const urlParams = new URLSearchParams();
         const formData = new FormData(document.getElementById("filter-form"));

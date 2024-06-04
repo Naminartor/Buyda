@@ -70,15 +70,13 @@
 					};
 
 					topicData = ["Bolivianischer Schmetterlingsbuntbarsch.jpg", "Calico Gold Platy.jpg", "Armano Garnele.jpg", "Cappuccino Schnecke.jpg", "Kaplopez.jpg"];
-					function createPopularSlides() {
+					function createPopularSlides(windowCount) {
 						slide = `<div class="carousel-item active">`;
 
-						const windowCount = 3;
 						let popularDataIndex = 0;
 						popularData.info.pictures.forEach((picture, i) => {
 							console.log(i);
 							if (i % windowCount == 0) {
-								console.log("start");
 								if (i > 0) {
 									slide += `<div class="carousel-item">`;
 								}
@@ -86,13 +84,13 @@
 							}
 
 							slide += `<div class="card bg-secondary" style=>
-                  <img src="${picture}" class="card-img-top" alt="...">
-                  <div class="card-body">
-                  <h5 class="card-title">${popularData.info.name[i]}</h5>
-                  <p class="card-text">${popularData.info.beschreibung[i]}</p>
-                  <a href="./shop#${popularData.info.name[i]}" class="btn btn-primary">weiter</a>
-                  </div></div>`;
-							if (i % windowCount == 2) {
+							<img src="${picture}" class="card-img-top" alt="...">
+							<div class="card-body">
+							<h5 class="card-title">${popularData.info.name[i]}</h5>
+							<p class="card-text">${popularData.info.beschreibung[i]}</p>
+							<a href="./shop#${popularData.info.name[i]}" class="btn btn-primary">weiter</a>
+							</div></div>`;
+							if (i % windowCount == windowCount-1) {
 								console.log("close");
 								slide += `</div></div>`;
 							}
@@ -117,8 +115,24 @@
 						topicSlider = document.querySelector("#fish-carousel .carousel-inner");
 						topicSlider.innerHTML = slider;
 					}
+					let windowCount = 3;
+					if (window.innerWidth < 768) {
+						windowCount = 1;
+					} else if (window.innerWidth < 992) {
+						windowCount = 2;
+					}
 					createTopicSlider();
-					createPopularSlides();
+					createPopularSlides(windowCount);
+
+					// responsive
+					window.addEventListener("resize", () => {
+						if (window.innerWidth < 768) {
+							windowCount = 1;
+						} else if (window.innerWidth < 992) {
+							windowCount = 2;
+						}
+						createPopularSlides(windowCount);
+					});
 				</script>
 			</div>
 			</main>

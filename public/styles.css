@@ -9,7 +9,7 @@
   --bs-border-color: #4b5056;
   --bs-body-color: #f8f9fa;
   --bs-secondary-rgb: 30,60,98;
-
+ 
 }
 .nav-link.active{
   --bs-nav-underline-link-active-color:var(--bs-primary)
@@ -122,7 +122,6 @@ ul {
 }
 .card {
   margin: 0 0.5em;
-  box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
   border: none;
   border-radius: 0;
 }
