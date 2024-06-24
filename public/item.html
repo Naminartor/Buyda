@@ -53,10 +53,10 @@
 			<footer></footer>
 		</div>
 		<script>
-			const item_name = window.location.hash.substring(1);
-
+			const itemName = decodeURI(window.location.hash.substring(1));
+			
 			$(document).ready(() => {
-				api.getItemByName(item_name).then(item => {
+				api.getItemByName(itemName).then(item => {
 					console.log(item)
 					$('main').find('img').attr('src', item.img);
 					$('#description').text(item.description);
@@ -77,14 +77,16 @@
 						$('#item-data').hide()
 					}
 					$('#add-to-cart').click(() => {
-						api.addCart(item_name, 1)
+						console.log(itemName)
+						api.addCart(itemName, 1)
 					});
 					$('#immediate-buy').click(() => {
-						api.addCart(item_name, 1)
+						
+						api.addCart(itemName, 1)
 						location.href = 'shopping-cart'
 					});
 				});
-			api.getItemStock(item_name).then(stock => {
+			api.getItemStock(itemName).then(stock => {
 				$('#stock').text(stock + ' St');
 			});
 			});
