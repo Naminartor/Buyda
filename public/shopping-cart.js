@@ -1,9 +1,9 @@
 $(document).ready(async function () {
-    sum = 0;
-    amount = 0;
-    shippingcost = 5;
+    let sum = 0;
+    let amount = 0;
+    let shippingcost = 5;
     const items = await api.getCart();
-    $cart = $("#cart ul");
+    let $cart = $("#cart ul");
     items.forEach((order) => {
         const template = $("#item-template").html();
         const $item = $(template);

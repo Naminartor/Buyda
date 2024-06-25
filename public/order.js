@@ -3,7 +3,6 @@
  */
 const EPSILON = 100;
 
-
 /**
  * Click handler for the "rebuy" button.
  * @param {Order[]} groupOrder - The group order to process.

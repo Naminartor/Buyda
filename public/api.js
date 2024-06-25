@@ -46,7 +46,12 @@ const api = {
         }
     },
     /**
-     * Retrieves items from the server based on the provided search query.
+     * Retrieves items from the server based on the provided search query.    cart :{
+        add: async function(item, amount) {},
+        update: async function(item, amount) {},
+        delete: async function(item) {},
+        get: async function() {},
+    },
      * @async
      * @function
      * @param {string} search - The search query.
