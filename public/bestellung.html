@@ -61,11 +61,11 @@
 			  $order.find('img').attr('src', order.img)
 			  
               $orders.find(".divider").append($order.html())
-            
+			  $orders.find(".rebuy").hide()
               last_date =order.timestamp
               i++
-              
               }while (i < orders.length && orders[i].timestamp - last_date< epsilon)
+			  
               $order = $('#orders').append($orders.html()).children().last()
 			  $order.find(".rebuy").click(async () => {
 				for (const order of rebuy) {
@@ -73,9 +73,13 @@
                 	await api.addCart(order.item, order.amount);
 				};
                 window.location.href = "shopping-cart";
+				
               })
-              
+			  debugger;
+              $order.children().last().find(".rebuy").show()
             }
+			
+			
           });
         </script>
 			</main>
