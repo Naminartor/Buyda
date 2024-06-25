@@ -4,22 +4,22 @@ $(document).ready(async function () {
     let shippingcost = 5;
     const items = await api.getCart();
     let $cart = $("#cart ul");
-    items.forEach((order) => {
+    items.forEach((cardItem) => {
         const template = $("#item-template").html();
         const $item = $(template);
-        console.log(order);
-        $item.find("img").attr("src", order.img);
-        $item.find("div.name").text(order.name);
-        $item.find(".price").text(order.price + CONSTANTS.CURRENCY);
-        $item.find(".amount").text(order.amount);
+        console.log(cardItem);
+        $item.find("img").attr("src", cardItem.img);
+        $item.find("div.name").text(cardItem.name);
+        $item.find(".price").text(cardItem.price + CONSTANTS.CURRENCY);
+        $item.find(".amount").text(cardItem.amount);
         $item.find(".delete").click(() => {
             (async () => {
-                await api.deleteCart(order.name);
+                await api.deleteCart(cardItem.name);
                 location.reload();
             })();
         });
-        sum += order.price * order.amount;
-        amount += order.amount;
+        sum += cardItem.price * cardItem.amount;
+        amount += cardItem.amount;
         $cart.append($item);
     });
     console.log(sum);
