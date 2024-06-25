@@ -19,9 +19,11 @@
  * @property {number} tempMax
  * @property {string} h2OHardness
  */
+
 /**
- * @typedef {Object} Order
- * @property {Item} item
+ * @typedef {Item & OrderProp} Order 
+
+ * @typedef {Object} OrderProp
  * @property {int} amount
  * @property {number} price
  * @property {number} timestamp
@@ -47,12 +49,17 @@
  * @property {string} sessionID
  * @property {int} timestamp
  * 
- * @typedef {Object} Stock
- * @property {Item} item
+ * @typedef {object} Stock
+ * @property {string} item
  * @property {int} amount
  * 
  * @typedef {Object} Cart
- * @property {Item} item
+ * @property {Array<CartItem>} items
+ * 
+ * 
+ * @typedef {object} CartItemProp
  * @property {int} amount
  * @property {int} userid
+ * 
+ * @typedef {Item & CartItemProp} CartItem
  */

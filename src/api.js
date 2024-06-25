@@ -297,7 +297,6 @@ module.exports = function (app) {
 			}
 		});
 	});
-
 	app.get("/api/user/orders/", (req, res) => {
 		const userid = req.userid;
 		db.all(`SELECT * FROM orders JOIN items ON orders.item = items.name WHERE userid = "${userid}"`, (err, rows) => {

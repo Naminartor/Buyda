@@ -34,7 +34,7 @@ db.serialize(function () {
 	db.run("CREATE TABLE IF NOT EXISTS stock (item TEXT, amount INTEGER)");
 
 	/**
-	 * Create a new table named 'cart; with @type {Cart}
+	 * Create a new table named 'cart; with @type {CartItem}
 	 */
 	db.run("CREATE TABLE IF NOT EXISTS cart (userid INTEGER, item TEXT, amount INTEGER)");
 });
