@@ -51,6 +51,7 @@ module.exports = function (app) {
 		const query = req.query.query;
 		const limit = req.query.limit;
 		const offset = req.query.offset;
+		console.log(`SELECT * FROM items WHERE name LIKE '%${query}%' LIMIT ${limit} OFFSET ${offset}`);
 		db.all(`SELECT * FROM items WHERE name LIKE '%${query}%' LIMIT ${limit} OFFSET ${offset}`, (err, rows) => {
 			if (err) {
 				console.log(err);
@@ -113,13 +114,18 @@ module.exports = function (app) {
 			} else {
 				query += " WHERE";
 			}
+			let subfilter = false;
 			subcategory.forEach((subcat, i) => {
 				if (i === 0) {
-					query += ` subCategory = "${subcat}"`;
+					subfilter = true;
+					query += ` (subCategory = "${subcat}"`;
 				} else {
 					query += ` OR subCategory = "${subcat}"`;
 				}
 			});
+			if (subfilter) {
+				query += ")";
+			}
 		}
 
 		if (limit) {
@@ -163,28 +169,30 @@ module.exports = function (app) {
 		const userid = req.userid;
 		const item = req.body.item;
 		const amount = req.body.amount;
-		db.get(`SELECT amount FROM cart WHERE userid = "${userid}" AND item = "${item}"`, (err, row) => {
-			if (err) {
-				res.status(500).send();
-			} else {
-				if (row) {
-					db.run(`UPDATE cart SET amount = "${row.amount + amount}" WHERE userid = "${userid}" AND item = "${item}"`, (err) => {
-						if (err) {
-							res.status(500).send();
-						} else {
-							res.send("Item added to cart successfully");
-						}
-					});
+		db.serialize(() => {
+			db.get(`SELECT amount FROM cart WHERE userid = "${userid}" AND item = "${item}"`, (err, row) => {
+				if (err) {
+					res.status(500).send();
 				} else {
-					db.run(`INSERT INTO cart (userid, item, amount) VALUES (?, ?, ?)`, [userid, item, amount], (err) => {
-						if (err) {
-							res.status(500).send();
-						} else {
-							res.send("Item added to cart successfully");
-						}
-					});
+					if (row) {
+						db.run(`UPDATE cart SET amount = "${row.amount + amount}" WHERE userid = "${userid}" AND item = "${item}"`, (err) => {
+							if (err) {
+								res.status(500).send();
+							} else {
+								res.send("Item added to cart successfully");
+							}
+						});
+					} else {
+						db.run(`INSERT INTO cart (userid, item, amount) VALUES (?, ?, ?)`, [userid, item, amount], (err) => {
+							if (err) {
+								res.status(500).send();
+							} else {
+								res.send("Item added to cart successfully");
+							}
+						});
+					}
 				}
-			}
+			});
 		});
 	});
 	app.post("/api/user/cart/update", (req, res) => {
@@ -228,7 +236,7 @@ module.exports = function (app) {
 	});
 
 	app.post("/api/user/checkout", (req, res) => {
-		const username = req.userid
+		const username = req.userid;
 		db.all(`SELECT * FROM cart WHERE userid = "${username}"`, (err, rows) => {
 			if (err) {
 				res.status(500).send();
@@ -238,38 +246,54 @@ module.exports = function (app) {
 					amount: row.amount,
 					username: row.userid,
 				}));
-				db.serialize(() => {
-					const timestamp = Date.now();
-					db.run(
-						`INSERT INTO orders (item, amount, userid, timestamp) VALUES (?, ?, ?, ?)`,
-						order.map((o) => [o.item, o.amount, o.username, timestamp]).flat(),
-						(err) => {
-							if (err) {
-								res.status(500).send();
-							}
-						}
-					);
-					//update stock
-					order.forEach((o) => {
-						db.get(`SELECT amount FROM stock WHERE item = "${o.item}"`, (err, row) => {
-							if (err) {
-								res.status(500).send();
-							} else {
-								db.run(`UPDATE stock SET amount = "${row.amount - o.amount}" WHERE item = "${o.item}"`, (err) => {
-									if (err) {
-										res.status(500).send();
-									}
-								});
-							}
+				const timestamp = Date.now();
+				db.run(`INSERT INTO orders (item, amount, userid, timestamp) VALUES (?, ?, ?, ?)`, order.map((o) => [o.item, o.amount, o.username, timestamp]).flat(), (err) => {
+					if (err) {
+						res.status(500).send();
+					}
+				});
+				//update stock
+				const result = Promise.all(
+					order.map((o) => {
+						return new Promise((resolve, reject) => {
+							db.get(`SELECT amount FROM stock WHERE item = "${o.item}"`, (err, row) => {
+								if (err) {
+									reject(500);
+								} else if (row.amount < o.amount) {
+									reject(400);
+								} else {
+									console.log("bought:", row);
+
+									resolve([row, o]);
+								}
+							});
 						});
-					});
-					db.run(`DELETE FROM cart WHERE userid = "${username}"`, (err) => {
-						if (err) {
+					})
+				);
+				result
+					.then((val) => {
+						console.log("res", val);
+						val.forEach(([row,o]) => {
+							console.log("row", row);
+							db.run(`UPDATE stock SET amount = "${row.amount - o.amount}" WHERE item = "${o.item}"`, (err) => {
+								if (err) {
+									throw 500;
+								}
+							});
+							db.run(`DELETE FROM cart WHERE userid = "${username}"`, (err) => {
+								if (err) {
+									throw 500;
+								}
+							});
+						});
+						res.status(200).send();
+					}).catch((err) => {
+					if (err === 400) {
+							res.status(400).send("Not enough stock available");
+						} else if (err === 500) {
 							res.status(500).send();
 						}
 					});
-					res.status(200).send();
-				});
 			}
 		});
 	});
@@ -297,30 +321,28 @@ module.exports = function (app) {
 	});
 
 	app.post("/api/user/password", (req, res) => {
-		app.post("/api/user/update", (req, res) => {
-			const userid = req.body.userid;
-			const currentPassword = req.body.currentPassword;
-			const newPassword = req.body.newPassword;
-			const hashedCurrentPassword = crypto.createHash("sha256").update(currentPassword).digest("hex");
-			const hashedNewPassword = crypto.createHash("sha256").update(newPassword).digest("hex");
+		const userid = req.userid;
+		const currentPassword = req.body.currentPassword;
+		const newPassword = req.body.newPassword;
+		const hashedCurrentPassword = crypto.createHash("sha256").update(currentPassword).digest("hex");
+		const hashedNewPassword = crypto.createHash("sha256").update(newPassword).digest("hex");
 
-			db.get(`SELECT * FROM users WHERE id = "${userid}" AND password = "${hashedCurrentPassword}"`, (err, row) => {
-				if (err) {
-					res.status(500).send();
+		db.get(`SELECT * FROM users WHERE id = "${userid}" AND password = "${hashedCurrentPassword}"`, (err, row) => {
+			if (err) {
+				res.status(500).send();
+			} else {
+				if (row) {
+					db.run(`UPDATE users SET password = "${hashedNewPassword}" WHERE id = "${userid}"`, (err) => {
+						if (err) {
+							res.status(500).send();
+						} else {
+							res.status(200).send();
+						}
+					});
 				} else {
-					if (row) {
-						db.run(`UPDATE users SET password = "${hashedNewPassword}" WHERE id = "${userid}"`, (err) => {
-							if (err) {
-								res.status(500).send();
-							} else {
-								res.status(200).send();
-							}
-						});
-					} else {
-						res.status(401).send("Invalid current password");
-					}
+					res.status(401).send("Invalid current password");
 				}
-			});
+			}
 		});
 	});
 
@@ -363,7 +385,7 @@ module.exports = function (app) {
 		const firstName = req.body.firstName;
 		const lastName = req.body.lastName;
 		const hashedPassword = crypto.createHash("sha256").update(password).digest("hex");
-		db.run(`INSERT INTO users (username, password, address, zipCode, city, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, address, zip, city,firstName, lastName], (err) => {
+		db.run(`INSERT INTO users (username, password, address, zipCode, city, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?, ?)`, [username, hashedPassword, address, zip, city, firstName, lastName], (err) => {
 			if (err) {
 				res.status(500).send();
 			} else {

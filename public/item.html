@@ -17,12 +17,12 @@
 			<div id="top-bar"></div>
 			<main class="container-fluid mb-auto">
 				<div class="row">
-					<div class="col-auto">
-						<div style="height: 180px; object-fit: scale-down; position: relative" class="">
-							<img height="300px" src="" class="card-img-top" alt="..." />
+					<div class="col-auto" style="min-width: 10rem;">
+						<div style="height: 180px; position: relative" class="">
+							<img src="" class="" alt="..." style="width: 100%;height: 100% ;object-fit: scale-down; " />
 						</div>
 					</div>
-					<div id="item-listing" class="col">
+					<div id="item-listing" class="col" style="min-width: 20rem;">
 						<p id="title" class="h3"></p>
 						<p id="description"></p>
 						<ul id="item-data">
@@ -38,15 +38,17 @@
 							<li id="h2Ohardness">Wasserhärte: <span></span></li>
 						</ul>
 					</div>
-					<div class="col-auto card bg-body-secondary d-flex flex-column rounded-bottom me-0" style="width: 300px; height: 500px">
+					<div class="col-sm-auto  card bg-body-secondary ms-0 d-flex flex-column rounded-bottom" style="min-width: 320px; height: 500px">
+					
 						<div>
 							<p id="price" class="h3 mt-2">4.00</p>
 							<p id="stock" class="bg-secondary rounded">12 St</p>
 						</div>
-						<div class="position-absolute bottom-0 mb-3" style="flex: 0 1 60px">
+						<div class="position-absolute bottom-0 me-1 mb-3" style="flex: 0 1 60px">
 							<button id="add-to-cart" class="btn btn-primary mb-1 w-100">In Einkaufswagen</button>
-							<a id="immediate-buy" class="btn btn-primary w-100" href="shopping-cart">Jetzt einkaufen</a>
+							<a id="immediate-buy" class="btn btn-primary w-100">Jetzt einkaufen</a>
 						</div>
+			
 					</div>
 				</div>
 			</main>
@@ -54,7 +56,7 @@
 		</div>
 		<script>
 			const itemName = decodeURI(window.location.hash.substring(1));
-			
+
 			$(document).ready(() => {
 				api.getItemByName(itemName).then(item => {
 					console.log(item)
@@ -80,9 +82,8 @@
 						console.log(itemName)
 						api.addCart(itemName, 1)
 					});
-					$('#immediate-buy').click(() => {
-						
-						api.addCart(itemName, 1)
+					$('#immediate-buy').click(async () => {					
+						await api.addCart(itemName, 1);
 						location.href = 'shopping-cart'
 					});
 				});

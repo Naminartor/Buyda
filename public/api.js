@@ -48,6 +48,8 @@ const api = {
      * @param {number} opt.limit - The maximum number of items to retrieve.
      * @param {number} opt.offset - The offset for pagination.
      * @returns {Promise<Array>} A promise that resolves to an array of items.
+     * 
+
      */
     searchItems: async function(search,opt) {
         try {
@@ -103,7 +105,7 @@ const api = {
      */
     getItems: async function(opt) {
         try {
-            url = '/api/items?'
+            url = '/api/items?' 
             if (opt.limit) {
                 url += `limit=${opt.limit}&`
             }
@@ -125,6 +127,10 @@ const api = {
             // Handle the error appropriately
         }
     },
+    /**
+     * Retrieves the order history for the current user from the server.
+     * @returns {Promise<Array>} A promise that resolves to an array of items.
+     */
     getOrderHistory: async function() {
         try {
             const response = await this.authFetch('/api/user/orders');
@@ -194,14 +200,18 @@ const api = {
         try {
             const response = await this.authFetch('/api/user/checkout', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
             });
             if (response.status === 200) {
-                return true;
+                return false
             }
-            return false;
+            return await response.text();
         } catch (error) {
             console.error('Error:', error);
-            return false
+            return null;
         }
     },
     getAccount: async function() {

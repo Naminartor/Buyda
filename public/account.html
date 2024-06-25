@@ -22,7 +22,7 @@
 							<img class="rounded-circle" style="height: 128px; background-color: gray;"  alt="avatar1" src="images/no-profile-picture-15257.svg" />
 						</div>
 						<div class="col-lg-auto d-flex d-flex align-items-center" >
-							<p class="h1 align-middle">Benutzername</p>
+							<p class="username h1 align-middle">Benutzername</p>
 						</div>
 					</div>
 					<div id="user-data"class="box">
@@ -87,6 +87,7 @@
 					$(document).ready(async() => {
 						const account = await api.getAccount()
 						console.log(account)
+						$('.username').text(account.username)
 						$("input[placeholder='Username']").val(account.username)
 						$("input[placeholder='Vorname']").val(account.firstName)
 						$("input[placeholder='Nachname']").val(account.lastName)
@@ -105,10 +106,10 @@
 							const city = $("input[placeholder='Stadt']").val()
 							api.updateAddress({address, zipCode, city})
 						});
-						$('#password button').click(() => {
+						$('#password button').click(async () => {
 							const currentPassword = $("input[placeholder='Current Password']").val()
 							const newPassword = $("input[placeholder='New Password']").val()
-							if(api.updatePassword({currentPassword, newPassword})) {
+							if(await api.updatePassword({currentPassword, newPassword})) {
 								alert('Password changed')
 							}else{
 								alert('Password change failed')

@@ -61,7 +61,7 @@ function findFile(filename, dir, files = []) {
 		const name = `${dir}/${file}`;
 		// Check if the current file/directory is a directory using fs.statSync
 		if (fs.statSync(name).isDirectory()) {
-			// If it is a directory, recursively call the getFiles function with the directory path and the files array
+			// If it is a directory, recursively call the findFile function with the directory path and the files array
 			findFile(filename, name, files);
 		} else {
 			// If it is a file, push the full path to the files array

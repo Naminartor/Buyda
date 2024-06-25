@@ -40,8 +40,6 @@ $(document).ready(() => {
     $("main").addClass("container-fluid  mb-auto");
 });
 
-
-
 const CONSTANTS = {
     CURRENCY: "€"
 }
