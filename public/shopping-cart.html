@@ -115,7 +115,7 @@
 								if (!err) {
 									window.location.href = "thank-you";
 								} else {
-									alert(err?? "Something went wrong" );
+									modalShow("Error", err?? "Something went wrong" , {single: true} );
 								}
 							})();
 						});

@@ -110,9 +110,9 @@
 							const currentPassword = $("input[placeholder='Current Password']").val()
 							const newPassword = $("input[placeholder='New Password']").val()
 							if(await api.updatePassword({currentPassword, newPassword})) {
-								alert('Password changed')
+								modalShow("Success", "Password changed", {single: true} );
 							}else{
-								alert('Password change failed')
+								modalShow("Error", "Password changed failed", {single: true} );
 							}
 						})
 					})

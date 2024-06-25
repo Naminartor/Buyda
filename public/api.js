@@ -189,7 +189,7 @@ const api = {
     },
     getCart: async function() {
         try {
-            const response = await this.authFetch('/api/user/cart', {redirect: 'follow'  });
+            const response = await this.authFetch('/api/user/cart');
             const data = await response.json();
             return data;
         } catch (error) {
