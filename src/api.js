@@ -247,11 +247,6 @@ module.exports = function (app) {
 					username: row.userid,
 				}));
 				const timestamp = Date.now();
-				db.run(`INSERT INTO orders (item, amount, userid, timestamp) VALUES (?, ?, ?, ?)`, order.map((o) => [o.item, o.amount, o.username, timestamp]).flat(), (err) => {
-					if (err) {
-						res.status(500).send();
-					}
-				});
 				//update stock
 				const result = Promise.all(
 					order.map((o) => {
@@ -283,6 +278,11 @@ module.exports = function (app) {
 							db.run(`DELETE FROM cart WHERE userid = "${username}"`, (err) => {
 								if (err) {
 									throw 500;
+								}
+							});
+							db.run(`INSERT INTO orders (item, amount, userid, timestamp) VALUES (?, ?, ?, ?)`, [o.item, o.amount, o.username, timestamp], (err) => {
+								if (err) {
+									res.status(500).send();
 								}
 							});
 						});
